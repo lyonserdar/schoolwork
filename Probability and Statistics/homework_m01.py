@@ -266,12 +266,12 @@ nickel = (
 plt.hist(chromium, bins = 10)
 plt.ylabel('Relative Frequency')
 plt.xlabel('Soil Concentration of Chromium (mg/kg)');
-plt.show()
+# plt.show()
 
 plt.hist(nickel, bins = 10)
 plt.ylabel('Relative Frequency')
 plt.xlabel('Soil Concentration of Nickel (mg/kg)');
-plt.show()
+# plt.show()
 
 # b. Boxplots
 data = [chromium, nickel]
@@ -279,7 +279,7 @@ data = [chromium, nickel]
 plt.boxplot(data)
 plt.ylabel('Soil Concentration (mg/kg)')
 plt.xticks([1, 2], ['Chromium', 'Nickel'])
-plt.show()
+# plt.show()
 
 # c. Both Chromium and Nickel are skewed to the right. Nickel Median is very close to 
 # the first quartile. Nickel has several outliers. 
@@ -287,3 +287,8 @@ plt.show()
 # Section 1.3 Exercise 8
 x = 1 - (.05 + .1 + .15 + .25 + .2 + .1)
 print (x) # 0.15
+
+a = [1,1,2,2,3,8,9,10000]
+print(mean(a))
+
+print(stats.trim_mean(a,.2))
