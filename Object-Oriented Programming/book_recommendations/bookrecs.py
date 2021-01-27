@@ -12,7 +12,6 @@ __divider__ = "-----------------------------------------------------------------
 
 
 from heapq import nlargest
-from operator import itemgetter
 
 authors_and_titles = []
 readers_and_ratings = {}
@@ -90,13 +89,12 @@ def main():
     print(f"Recommendations for {name} from {two_friends[0]} and {two_friends[1]}:")
     recommended_books = recommend(name)
     recommended_books = sorted(
-        recommended_books,
-        key=lambda i: ((i[0].split())[-1], (i[0].split())[0], i[1]),
+        recommended_books, key=lambda i: ((i[0].split())[-1], (i[0].split())[0], i[1]),
     )
     for book in recommended_books:
         print(f"\t{book[0]}, {book[1]}")
-    # print(sorted(recommended_books, key=itemgetter(1,0)))
 
 
 if __name__ == "__main__":
     main()
+ß
