@@ -18,34 +18,44 @@ An example of the program output is shown below:
 List: [3, 1, 7, 1, 4, 10] Mode: 1 Median: 3.5 Mean: 4.33333333333333
 """
 
-from math import ceil
 
 def median(numbers):
+    """Calculates the median"""
     if not numbers:
         return 0
     numbers.sort()
     if len(numbers) % 2 == 1:
-        return numbers[ceil(len(numbers) / 2)]
+        return numbers[int(len(numbers) / 2)]
     else:
         return (numbers[int(len(numbers) / 2 - 1)] + numbers[int(len(numbers) / 2)]) / 2
-    
+
 
 def mode(numbers):
+    """Calculates the mode"""
     if not numbers:
         return 0
     return max(set(numbers), key=numbers.count)
 
+
 def mean(numbers):
-    if not numbers: 
+    """Calculates the mean"""
+    if not numbers:
         return 0
     total = 0
     for number in numbers:
         total += number
     return total / len(numbers)
 
-lyst = [3, 1, 7, 1, 4, 10]
 
-print(f"List: {lyst}")
-print(f"Mode: {mode(lyst)}")
-print(f"Median: {median(lyst)}")
-print(f"Mean: {mean(lyst)}")
+def main():
+
+    lyst = [3, 1, 7, 1, 4, 10]
+
+    print(f"List: {lyst}")
+    print(f"Mode: {mode(lyst)}")
+    print(f"Median: {median(lyst)}")
+    print(f"Mean: {mean(lyst)}")
+
+
+if __name__ == "__main__":
+    main()
