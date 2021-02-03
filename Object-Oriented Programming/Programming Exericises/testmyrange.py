@@ -23,8 +23,7 @@ print(myRange(10))
 """
 
 
-# Put your code here
-def myRange(start = 0, stop = None, step = None):
+def myRange(start=0, stop=None, step=None):
     """Returns a list of numbers with given start, stop, step"""
     range_list = []
     if stop and start > stop:
@@ -35,10 +34,10 @@ def myRange(start = 0, stop = None, step = None):
 
         if not step:
             step = -1
-    
+
         while stop > start:
             range_list.append(stop)
-            stop += step  
+            stop += step
 
     if not stop:
         stop = start
@@ -50,17 +49,18 @@ def myRange(start = 0, stop = None, step = None):
 
         while start < stop:
             range_list.append(start)
-            start += step 
+            start += step
     else:
         if not step:
             step = 1
         while start < stop:
             range_list.append(start)
-            start += step 
+            start += step
     print(range_list)
     return range_list
 
-myRange(5)
-myRange(5, 9)
-myRange(5, 18, 2)
-myRange(9, 5)
+
+print(myRange(5))
+print(myRange(5, 9))
+print(myRange(5, 18, 2))
+print(myRange(9, 5))
