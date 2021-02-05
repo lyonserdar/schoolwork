@@ -50,10 +50,13 @@ class GuessingGame(EasyFrame):
     def goLarge(self):
         """Guess was too small, so move guess to the right of the number."""
         # Write code here
+        self.myNumber += 1
+        self.myLabel.setText(self.myNumber)
         
     def goSmall(self):
         """Guess was too large, so move guess to the left of the number."""
-        # Write code here
+        self.myNumber -= 1
+        self.myLabel.setText(self.myNumber)
 
     def goCorrect(self):
         """Guess was too correct, so announce and wait."""

@@ -71,7 +71,15 @@ def recommend(name):
                 or readers_and_ratings[two_friends[1]][index] >= 3
             ):
                 recommended_books.append(authors_and_titles[index])
-    return recommended_books
+    return sorted(
+        recommended_books, key=lambda i: ((i[0].split())[-1], (i[0].split())[0], i[1]),
+    )
+
+
+def has_reader(name):
+    if name in readers_and_ratings:
+        return True
+    return False
 
 
 def main():
@@ -81,10 +89,9 @@ def main():
     load_files()
     name = input("Enter a reader's name: ")
     name = name.lower()
-    if name not in readers_and_ratings:
+    if not has_reader(name):
         print(f"No such reader {name}")
         return
-
     two_friends = friends(name)
     print(f"Recommendations for {name} from {two_friends[0]} and {two_friends[1]}:")
     recommended_books = recommend(name)
