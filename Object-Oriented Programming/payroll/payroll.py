@@ -11,6 +11,7 @@ __date__ = "2/5/2021"
 __divider__ = "------------------------------------------------------------------------"
 
 from abc import ABC, abstractmethod
+import os
 
 EMPLOYEE_FILE = "employees.csv"
 PAY_LOGFILE = "payroll.txt"
@@ -18,8 +19,6 @@ TIMECARD_FILE = "timecards.csv"
 RECEIPTS_FILE = "receipts.csv"
 
 employees = []
-timecards = {}
-receipts = {}
 
 
 def load_employees():
@@ -29,18 +28,6 @@ def load_employees():
         header_line = next(f)  # Skip the header
         for line in f:
             line = line.strip().split(",")
-            classification = None
-            classification_index = line[7]  # Classification (column 7)
-            if classification_index == 1:  # Salaried
-                salary = line[8]  # Salary (column 8)
-                classification = Salaried(salary)
-            elif classification_index == 2:  # Commissioned
-                salary = line[8]  # Salary (column 8)
-                commission_rate = line[9]  # Commission Rate (column 9)
-                classification = Commissioned(salary, commission_rate)
-            elif classification_index == 3:  # Hourly
-                hourly_rate = line[10]  # Hourly Rate (column 10)
-                classification = Hourly(hourly_rate)
             employee = Employee(
                 line[0],  # emp_id
                 line[1],  # first_name
@@ -49,8 +36,19 @@ def load_employees():
                 line[4],  # city
                 line[5],  # state
                 line[6],  # zipcode
-                classification,
             )
+            classification = None
+            classification_index = int(line[7])  # Classification (column 7)
+            if classification_index == 1:  # Salaried
+                salary = float(line[8])  # Salary (column 8)
+                employee.make_salaried(salary)
+            elif classification_index == 2:  # Commissioned
+                salary = float(line[8])  # Salary (column 8)
+                commission_rate = float(line[9])  # Commission Rate (column 9)
+                employee.make_commissioned(salary, commission_rate)
+            elif classification_index == 3:  # Hourly
+                hourly_rate = float(line[10])  # Hourly Rate (column 10)
+                employee.make_hourly(hourly_rate)
             employees.append(employee)
 
 
@@ -59,7 +57,12 @@ def process_timecards():
     with open(TIMECARD_FILE, "r") as f:
         for line in f:
             line = line.strip().split(",")
-            timecards[line[0]] = line[1:]
+            emp_id = line[0]
+            employee = find_employee_by_id(emp_id)
+            times = line[1:]
+            for time in times:
+                employee.classification.add_timecard(float(time))
+            print(employee.classification.timecard)
 
 
 def process_receipts():
@@ -67,10 +70,15 @@ def process_receipts():
     with open(RECEIPTS_FILE, "r") as f:
         for line in f:
             line = line.strip().split(",")
-            receipts[line[0]] = line[1:]
+            emp_id = line[0]
+            employee = find_employee_by_id(emp_id)
+            receipts = line[1:]
+            for receipt in receipts:
+                employee.classification.add_receipt(float(receipt))
 
 
 def run_payroll():
+    print("run_payroll()")
     if os.path.exists(PAY_LOGFILE):
         os.remove(PAY_LOGFILE)
     for emp in employees:
@@ -78,7 +86,12 @@ def run_payroll():
 
 
 def find_employee_by_id(emp_id):
-    print("find_employee_by_id()", emp_id)
+    for employee in employees:
+        if employee.emp_id == emp_id:
+            return employee
+
+    print("Employee with given id does not exists!")
+    return None
 
 
 class Employee:
@@ -104,18 +117,11 @@ class Employee:
         self.zipcode = zipcode
         self.classification = classification
 
-    # @property
-    # def classification(self):
-    #     """Get the employee classification"""
-    #     return self.classification
-
-    # @classification.setter
-    # def classification(self, value):
-    #     """Set the employee classification"""
-    #     self.classification = value
-
     def issue_payment(self):
-        pass
+        with open(PAY_LOGFILE, "a+") as f:
+            pay = self.classification.compute_pay()
+            if pay:
+                f.write(f"Mailing {pay:.2f} to {self.full_name} at {self.full_address} \n")
 
     def make_salaried(self, salary):
         self.classification = Salaried(salary)
@@ -124,11 +130,18 @@ class Employee:
         self.classification = Hourly(hourly_rate)
 
     def make_commissioned(self, salary, commission_rate):
-        self.classification(salary, commission_rate)
+        self.classification = Commissioned(salary, commission_rate)
+
+    @property
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}"
+
+    @property
+    def full_address(self):
+        return f"{self.address} {self.city} {self.state} {self.zipcode}"
 
     def __str__(self):
-        full_name = f"{self.first_name} {self.last_name}"
-        return f"{full_name} (id:{self.emp_id}, {str(self.classification)})"
+        return f"{self.full_name} (id:{self.emp_id}, {str(self.classification)})"
 
 
 class Classification(ABC):
@@ -144,12 +157,15 @@ class Hourly(Classification):
 
     def __init__(self, hourly_rate):
         self.hourly_rate = hourly_rate
+        self.timecard = []
 
-    def compute_pay():
-        pass
+    def compute_pay(self):
+        hours = sum(self.timecard)
+        self.timecard = []
+        return round(hours * self.hourly_rate, 2)
 
     def add_timecard(self, time):
-        timecards[]
+        self.timecard.append(time)
 
     def __str__(self):
         return f"Hourly"
@@ -161,8 +177,8 @@ class Salaried(Classification):
     def __init__(self, salary):
         self.salary = salary
 
-    def compute_pay():
-        pass
+    def compute_pay(self):
+        return round(self.salary / 24, 2)
 
     def __str__(self):
         return f"Salaried"
@@ -174,32 +190,33 @@ class Commissioned(Salaried):
     def __init__(self, salary, commission_rate):
         super().__init__(salary)
         self.commission_rate = commission_rate
+        self.receipts = []
 
-    def compute_pay():
-        pass
+    def compute_pay(self):
+        receipts = sum(self.receipts)
+        self.receipts = []
+        return round(self.salary / 24 + receipts * self.commission_rate / 100.0, 2)
 
     def add_receipt(self, rate):
-        pass
+        self.receipts.append(rate)
 
     def __str__(self):
         return f"Commissioned"
 
 
 def main():
-    # emp = Employee(
-    #     "10593855",
-    #     "Serdar",
-    #     "Lyon",
-    #     "Test address",
-    #     "Orem",
-    #     "UT",
-    #     84059,
-    #     Salaried(120000.00),
-    # )
-    # print(emp)
     load_employees()
     process_timecards()
     process_receipts()
+    run_payroll()
+
+    employee = Employee(
+        "12-3456789", "John", "Doe", "123 Anystreet", "Anytown", "Anystate", "98765"
+    )
+    rate = 35.5
+    employee.make_hourly(rate)
+    for d in range(10):
+        employee.classification.add_timecard(4.0 + d * 0.5)
 
 
 if __name__ == "__main__":
