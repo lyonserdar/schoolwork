@@ -118,19 +118,41 @@ class Employee:
         self.classification = classification
 
     def issue_payment(self):
-        with open(PAY_LOGFILE, "a+") as f:
-            pay = self.classification.compute_pay()
-            if pay:
-                f.write(f"Mailing {pay:.2f} to {self.full_name} at {self.full_address} \n")
+        try:
+            with open(PAY_LOGFILE, "a+") as f:
+                pay = self.classification.compute_pay()
+                if pay:
+                    f.write(
+                        f"Mailing {pay:.2f} to {self.full_name} at {self.full_address} \n"
+                    )
+            return True
+        except:
+            print("Unexpected error while issuing payment!")
+            return False
 
     def make_salaried(self, salary):
-        self.classification = Salaried(salary)
+        try:
+            self.classification = Salaried(salary)
+            return True
+        except:
+            print("Unexpected error while making employee salaried!")
+            return False
 
     def make_hourly(self, hourly_rate):
-        self.classification = Hourly(hourly_rate)
+        try:
+            self.classification = Hourly(hourly_rate)
+            return True
+        except:
+            print("Unexpected error while making employee hourly!")
+            return False
 
     def make_commissioned(self, salary, commission_rate):
-        self.classification = Commissioned(salary, commission_rate)
+        try:
+            self.classification = Commissioned(salary, commission_rate)
+            return True
+        except:
+            print("Unexpected error while making employee commissioned!")
+            return False
 
     @property
     def full_name(self):
@@ -165,7 +187,12 @@ class Hourly(Classification):
         return round(hours * self.hourly_rate, 2)
 
     def add_timecard(self, time):
-        self.timecard.append(time)
+        try:
+            self.timecard.append(time)
+            return True
+        except:
+            print("Unexpected error while adding timecard!")
+            return False
 
     def __str__(self):
         return f"Hourly"
@@ -198,7 +225,12 @@ class Commissioned(Salaried):
         return round(self.salary / 24 + receipts * self.commission_rate / 100.0, 2)
 
     def add_receipt(self, rate):
-        self.receipts.append(rate)
+        try:
+            self.receipts.append(rate)
+            return True
+        except:
+            print("Unexpected error while adding receipt!")
+            return False
 
     def __str__(self):
         return f"Commissioned"
