@@ -10,6 +10,7 @@ X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.25, random_state=10, stratify=y
 )
 
+
 def main():
     print(iris.DESCR)
     print(iris.keys())
