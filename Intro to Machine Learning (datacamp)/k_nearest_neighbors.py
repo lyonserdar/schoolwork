@@ -1,4 +1,4 @@
-from sklearn import datasets, neighbors
+from sklearn import datasets
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
 import numpy as np
