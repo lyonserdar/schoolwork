@@ -15,6 +15,7 @@ def main():
     print(iris.DESCR)
     print(iris.keys())
     print(iris.data.shape)
+    print(iris.target_names)
 
 
 if __name__ == "__main__":
