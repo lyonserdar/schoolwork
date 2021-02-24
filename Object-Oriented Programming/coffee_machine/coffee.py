@@ -61,6 +61,7 @@ class CoffeeMachine:
         # Operation insert<coin>
         if command_opr == "insert":
             if command_arg not in [5, 10, 25, 50]:
+                print("INVALID AMOUNT >>>")
                 print("We only take half-dollars, quarters, dimes, and nickels.")
                 return True
             self.cash_box.deposit(command_arg)
@@ -76,8 +77,7 @@ class CoffeeMachine:
 
         # Operation cancel
         if command_opr == "cancel":
-            print("cancel")
-            # return remaining credit
+            self.cash_box.return_coins()
             return True
 
         # Operation quit
