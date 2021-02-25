@@ -51,7 +51,7 @@ total_volume_mean = n_samples * fill_volume_mean
 print("total_volume_mean:", total_volume_mean)  # 480.24 ounces
 
 # b. Find the standard deviation of the total volume of the beverage in the case.
-total_volume_std = n_samples * fill_volume_std
+total_volume_std = sqrt(n_samples * fill_volume_std ** 2)
 print("total_volume_std:", total_volume_std)  # 0.48 ounces
 
 # c. Find the mean of the average volume per bottle of the beverage in the case.
@@ -132,7 +132,7 @@ print("variance_in_inches:", variance_in_inches)  # 0.000310472 inches ** 2
 #    mean and variance of the total thickness.
 total_thickness_mean = 3 * mean
 print("total_thickness_mean:", total_thickness_mean)  # 15 mm
-total_thickness_variance = 3 ** 2 * variance
+total_thickness_variance = 3 * variance
 print("total_thickness_variance:", total_thickness_variance)  # 1.8 mm ** 2
 
 ### Extra Credit (5 points)
