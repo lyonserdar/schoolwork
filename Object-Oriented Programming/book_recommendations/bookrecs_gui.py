@@ -7,12 +7,15 @@ __class__ = "CS 1410"
 __project__ = "Project 4 - GUI for Book Recommendations"
 __author__ = "Ali Serdar Aydogdu"
 __email__ = "lyonserdar@gmail.com"
-__date__ = "2/5/2021"
+__date__ = "3/17/2021"
 __divider__ = "------------------------------------------------------------------------"
 
 
 from breezypythongui import EasyFrame
 import bookrecs
+
+WIDTH = 120
+HEIGHT = 30
 
 
 class MainWindow(EasyFrame):
@@ -26,7 +29,7 @@ class MainWindow(EasyFrame):
         self.addButton(
             text="Recommend", row=0, column=1, command=self.getRecommendations
         )
-        self.addButton(text="Report", row=0, column=2, command=self.getReader)
+        self.addButton(text="Report", row=0, column=2, command=self.getReport)
 
     # The event handler method for the button
     def getReader(self):
@@ -52,8 +55,12 @@ class MainWindow(EasyFrame):
             message = bookrecs.friends(reader)
             print(message)
             message = "\n".join(message)
-            # TODO: Ressize the messageBox
-            self.messageBox(title=f"Friends of {reader}", message=message)
+            self.messageBox(
+                title=f"Friends of {reader}",
+                message=message,
+                width=WIDTH,
+                height=HEIGHT,
+            )
 
     def getRecommendations(self):
         reader = self.getReader()
@@ -63,22 +70,30 @@ class MainWindow(EasyFrame):
             for book in recommended_books:
                 message.append(f"{book[0]}, {book[1]}")
             message = "\n".join(message)
-            # TODO: Ressize the messageBox
-            self.messageBox(title=f"Friends of {reader}", message=message)
+            self.messageBox(
+                title=f"Friends of {reader}",
+                message=message,
+                width=WIDTH,
+                height=HEIGHT,
+            )
 
     def getReport(self):
-        pass
-        # TODO: Finish getReport()
-        # TODO: Extract the keys from your ratings dictionary and call sorted.
-        # TODO: Ressize the messageBox
-        # two_friends = friends(name)
-        # print(f"Recommendations for {name} from {two_friends[0]} and {two_friends[1]}:")
-        # recommended_books = recommend(name)
-        # recommended_books = sorted(
-        #     recommended_books, key=lambda i: ((i[0].split())[-1], (i[0].split())[0], i[1]),
-        # )
-        # for book in recommended_books:
-        #     print(f"\t{book[0]}, {book[1]}")
+        message = ""
+        for name in bookrecs.get_readers():
+            two_friends = bookrecs.friends(name)
+            message += f"Recommendations for {name} from {two_friends[0]} and {two_friends[1]}:\n"
+            recommended_books = bookrecs.recommend(name)
+            recommended_books = sorted(
+                recommended_books,
+                key=lambda i: ((i[0].split())[-1], (i[0].split())[0], i[1]),
+            )
+            for book in recommended_books:
+                message += f"\t{book[0]}, {book[1]}\n"
+            message += "\n"
+        self.messageBox(
+            title=f"Report", message=message, width=WIDTH, height=HEIGHT,
+        )
+
 
 def main():
     print(__divider__)

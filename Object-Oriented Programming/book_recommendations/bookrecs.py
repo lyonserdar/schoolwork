@@ -76,6 +76,13 @@ def recommend(name):
     )
 
 
+def get_readers():
+    return sorted(
+        list(readers_and_ratings.keys()),
+        key=lambda i: ((i[0].split())[-1], (i[0].split())[0], i[1]),
+    )
+
+
 def has_reader(name):
     if name in readers_and_ratings:
         return True
