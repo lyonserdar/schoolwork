@@ -17,3 +17,9 @@ import matplotlib.pyplot as plt
 # Data Collection 
 # Google the average daily temperature for the last two years (or so) in Orem, UT. 
 # Collect all data in a vector. This will serve as the population. 
+
+# Preferably out put the data to a csv file
+# That way it is easier to import as Pandas data frame. 
+
+# First column: date 
+# Second column: temperature
