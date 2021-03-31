@@ -21,9 +21,10 @@ n = 50  # Sample size
 
 # Import data from the csv file
 # df = pd.read_csv("sample_temperature_data.csv")
-df = pd.read_csv("weather_data.csv")  # Read the temp data from csv file
+df = pd.read_csv("weather.csv")  # Read the temp data from csv file
 # df = df[["date", "temperature"]]
-df["date"] = pd.to_datetime(df["date"])
+df["date"] = pd.to_datetime(df["date"]) # 2018-10-01
+print(df.head())
 # print(df.head())  # See first 5 elements of the dataframe
 # print(df.shape)  # Size of the dataframe
 # df = df.append(df, ignore_index=True)
@@ -64,6 +65,7 @@ print(f"Mean and Variance of temp(y): {y_mean}, {y_variance}")
 # b. Use simple random sample (SRS) sampling method and randomly select 50 samples.
 # Then, compute the sample mean and sample variance.
 df_sample = df.sample(n=n, random_state=SEED)
+print(df_sample)
 
 X_sample = df_sample[["day"]].values
 y_sample = df_sample[["temperature"]].values
@@ -199,8 +201,6 @@ prediction = b[0] * predict_day ** 2 + b[1] * predict_day + b[2]
 print(
     f"Prediction for {predict_date} is {prediction} F."
 )  #  Predicted Temp: 67.77056534 F
-
-
 
 predict_date = "2021-12-15"
 predict_day = pd.Period(predict_date, freq="D").dayofyear  # Day 166
