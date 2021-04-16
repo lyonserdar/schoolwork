@@ -54,7 +54,7 @@ def analyze(fname):
                     continue
         i += 1
 
-    with open(f"{basename}.out", 'w+') as f:
+    with open(f"{basename}.out", "w+") as f:
         f.write(f"{fname}:\n")
         for index, position in enumerate(pulse_positions):
             area = 0
@@ -68,10 +68,6 @@ def analyze(fname):
                     area += original[point]
                     point += 1
             f.write(f"Pulse {index}: {position} ({area})\n")
-        
-            
-
-
 
 
 def main():

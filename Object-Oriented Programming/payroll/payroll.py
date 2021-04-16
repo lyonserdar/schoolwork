@@ -7,7 +7,7 @@ __class__ = "CS 1410"
 __project__ = "Project 5 - Payroll"
 __author__ = "Ali Serdar Aydogdu"
 __email__ = "lyonserdar@gmail.com"
-__date__ = "2/5/2021"
+__date__ = "3/25/2021"
 __divider__ = "------------------------------------------------------------------------"
 
 from abc import ABC, abstractmethod
@@ -170,7 +170,7 @@ class Classification(ABC):
     """Abstract class for Employee Classification"""
 
     @abstractmethod
-    def compute_pay():
+    def compute_pay(self):
         pass
 
 
