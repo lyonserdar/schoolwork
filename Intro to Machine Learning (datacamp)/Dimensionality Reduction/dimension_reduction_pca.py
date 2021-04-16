@@ -1,3 +1,4 @@
+# TODO: fix the imports 
 from sklearn.decomposition import PCA
 from dataset_iris import X_train, X_test, y_train, y_test
 import matplotlib.pyplot as plt
