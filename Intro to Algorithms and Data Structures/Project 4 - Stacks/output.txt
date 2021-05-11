@@ -1,0 +1,56 @@
+infix: 4
+postfix: 4
+answer: 4
+
+infix: 5  +7
+postfix: 5 7 +
+answer: 12
+
+infix: 7*5
+postfix: 7 5 *
+answer: 35
+
+infix: (5-3)
+postfix: 5 3 -
+answer: 2
+
+infix: 5/5
+postfix: 5 5 /
+answer: 1.0
+
+infix: 8*5+3
+postfix: 8 5 * 3 +
+answer: 43
+
+infix: 8*(5+3)
+postfix: 8 5 3 + *
+answer: 64
+
+infix: 8+3*5-7
+postfix: 8 3 5 * + 7 -
+answer: 16
+
+infix: (8+3)*(5-6)
+postfix: 8 3 + 5 6 - *
+answer: -11
+
+infix: ((8+3)*(2-7))
+postfix: 8 3 + 2 7 - *
+answer: -55
+
+infix: ((8+3)*2)-7
+postfix: 8 3 + 2 * 7 -
+answer: 15
+
+infix: (8*5)+((3-2)-7*3)
+postfix: 8 5 * 3 2 - 7 3 * - +
+answer: 20
+
+infix: ((8*5+3)-7)-(5*3)
+postfix: 8 5 * 3 + 7 - 5 3 * -
+answer: 21
+
+infix: 7*9+7-5*6+3-4
+postfix: 7 9 * 7 + 5 6 * - 3 + 4 -
+answer: 39
+

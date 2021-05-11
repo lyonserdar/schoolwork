@@ -6,6 +6,8 @@ copying any source code, in whole or in part, constitutes cheating, and that I w
 receive a zero on this project if I am found in violation of this policy. 
 -
 TODO: complete the project description
+TODO: complete course print
+TODO: read file and print courses
 """
 
 # * Project 3 - Student Class List

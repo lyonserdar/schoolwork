@@ -2,6 +2,7 @@
 Course List Implementation
 TODO: fix docstring
 TODO: cleanup iterator 
+TODO: complete course print
 """
 
 
