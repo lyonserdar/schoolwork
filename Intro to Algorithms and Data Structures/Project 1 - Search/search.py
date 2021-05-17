@@ -24,6 +24,10 @@ SEED = 10
 
 def linear_search(lyst, target):
     """Linear search algorithm"""
+
+    if lyst is None or target is None:
+        return False
+
     i = 0
     while i < len(lyst):
         if lyst[i] == target:
@@ -33,33 +37,35 @@ def linear_search(lyst, target):
 
 
 def binary_search(lyst, target, left=0, right=0):
-    """Binary search algorithm"""
+    """Recursive binary search algorithm"""
+
+    if lyst is None or target is None:
+        return False
+
     if right == 0:
-        # initialize the right
         right = len(lyst) - 1
 
     if left > right:
-        # target not found, search unsuccessfully ended
-        return False
+        return False  # target not found, search ended
 
-    # set the middle point of the search
     middle = (left + right) // 2
 
     if lyst[middle] == target:
-        # target found, search successfully ended
-        return True
+        return True  # target found, search ended
     elif lyst[middle] < target:
-        # search the right side
         left = middle + 1
         return binary_search(lyst, target, left, right)
     elif lyst[middle] > target:
-        # search the left side
         right = middle - 1
         return binary_search(lyst, target, left, right)
 
 
 def jump_search(lyst, target):
     """Jump search algorithm"""
+
+    if lyst is None or target is None:
+        return False
+
     jump = int(sqrt(len(lyst)))
     index = 0
 
@@ -88,37 +94,30 @@ def benchmark(func, *args):
     start = perf_counter()
     func(*args)
     finish = perf_counter()
-    return f"{finish - start:.10f}"
+    return f"{finish - start:.8f}"
+
+
+def test_search_algorithms(data, name, algorithm):
+    """Tests the search algorithms"""
+    results = []
+    results.append(benchmark(algorithm, data, data[0]))
+    results.append(benchmark(algorithm, data, data[(len(data) // 2)]))
+    results.append(benchmark(algorithm, data, data[-1]))
+    results.append(benchmark(algorithm, data, -1))
+    print(f"{name}:\t{results}")
 
 
 def main():
     """This is the main function"""
     print(__divider__)
     print(__project__)
+    print(f"by {__author__}")
     print(__divider__)
     data = next(generate_data())  # Generate the data
     print("['first_element', 'middle_element', 'last_element', 'missing_element']")
-    results = []
-    print("Benchmark for Linear Search")
-    results.append(benchmark(linear_search, data, data[0]))
-    results.append(benchmark(linear_search, data, data[(len(data) // 2)]))
-    results.append(benchmark(linear_search, data, data[-1]))
-    results.append(benchmark(linear_search, data, -1))
-    print(results)
-    results.clear()
-    print("Benchmark for Binary Search")
-    results.append(benchmark(binary_search, data, data[0]))
-    results.append(benchmark(binary_search, data, data[(len(data) // 2)]))
-    results.append(benchmark(binary_search, data, data[-1]))
-    results.append(benchmark(binary_search, data, -1))
-    print(results)
-    results.clear()
-    print("Benchmark for Jump Search")
-    results.append(benchmark(jump_search, data, data[0]))
-    results.append(benchmark(jump_search, data, data[(len(data) // 2 - 4)]))
-    results.append(benchmark(jump_search, data, data[-1]))
-    results.append(benchmark(jump_search, data, -1))
-    print(results)
+    test_search_algorithms(data, "Linear Search", linear_search)
+    test_search_algorithms(data, "Binary Search", binary_search)
+    test_search_algorithms(data, "Jump Search", jump_search)
 
 
 if __name__ == "__main__":
