@@ -12,7 +12,7 @@ __project__ = "Project 2 - Benchmarking Sorting Algorithms"
 __author__ = "Ali Serdar Aydogdu"
 __email__ = "lyonserdar@gmail.com"
 __date__ = "6/15/2021"
-__divider__ = "------------------------------------------------------------------------"
+__divider__ = 72 * "-"
 
 from random import seed, sample, randint
 from time import perf_counter
@@ -26,12 +26,9 @@ def quicksort(lyst):
     if len(lyst) < 2:
         return lyst
 
-    low = []
-    high = []
-    same = []
+    low, high, same = [], [], []
 
-    # random pivot
-    pivot = lyst[randint(0, len(lyst) - 1)]
+    pivot = lyst[randint(0, len(lyst) - 1)]  # random pivot
 
     for element in lyst:
         if element < pivot:
@@ -128,26 +125,22 @@ def bubble_sort(lyst):
     return lyst
 
 
-def timesort(lyst):
-    """Timesort call"""
-    # Use builtin timesort
-    pass
+def timsort(lyst):
+    """Timsort call"""
+    lyst.sort()  # Use builtin timesort
+    return lyst
 
 
 def is_sorted(lyst):
     """Check if the given list is sorted"""
     # check if lyst is a list
     if type(lyst) is not list:
-        # print("The input is not a list")
         return False
     if len(lyst) == 0:
-        # print("The input has no elements")
         return False
     if not all(isinstance(x, int) for x in lyst):
-        # print("Not all elements are int")
         return False
     if not all(lyst[i] <= lyst[i + 1] for i in range(len(lyst) - 1)):
-        # print("The list is not sorted")
         return False
     return True
 
@@ -163,49 +156,30 @@ def generate_data():
 def benchmark(func, *args):
     """Performs benchmark for given function and returns elapsed time"""
     start = perf_counter()
-    data = func(*args)
+    func(*args)
     finish = perf_counter()
-    return f"{finish - start:.10f}", data
+    return f"{finish - start:.6f}"
+
+
+def test_sorting_algorithms(data, name, algorithm):
+    """Tests the sorting algorithms"""
+    print(f"Starting {name}")
+    print(f"{name} duration: {benchmark(algorithm, data)} seconds.\n")
 
 
 def main():
     """This is the main function"""
     print(__divider__)
     print(__project__)
+    print(f"by {__author__}")
     print(__divider__)
     data = next(generate_data())  # Generate the data
-    # data = [3, 7, 1, 9, 4, 2, 5, 8, 6, 10, 0]
-    print(len(data))
-    test = data.copy()
-    print("Benchmark for Insertion Sort")
-    print("Before:", "sorted" if is_sorted(test) else "not sorted")
-    elapsed_time, sorted_list = benchmark(insertion_sort, test)
-    print(f"Time elapsed: {elapsed_time}")
-    print("After:", "sorted" if is_sorted(sorted_list) else "not sorted")
-    test = data.copy()
-    print("Benchmark for Selection Sort")
-    print("Before:", "sorted" if is_sorted(test) else "not sorted")
-    elapsed_time, sorted_list = benchmark(selection_sort, test)
-    print(f"Time elapsed: {elapsed_time}")
-    print("After:", "sorted" if is_sorted(sorted_list) else "not sorted")
-    test = data.copy()
-    print("Benchmark for Bubble Sort")
-    print("Before:", "sorted" if is_sorted(test) else "not sorted")
-    elapsed_time, sorted_list = benchmark(bubble_sort, test)
-    print(f"Time elapsed: {elapsed_time}")
-    print("After:", "sorted" if is_sorted(sorted_list) else "not sorted")
-    test = data.copy()
-    print("Benchmark for Mergesort")
-    print("Before:", "sorted" if is_sorted(test) else "not sorted")
-    elapsed_time, sorted_list = benchmark(mergesort, test)
-    print(f"Time elapsed: {elapsed_time}")
-    print("After:", "sorted" if is_sorted(sorted_list) else "not sorted")
-    test = data.copy()
-    print("Benchmark for Quicksort")
-    print("Before:", "sorted" if is_sorted(test) else "not sorted")
-    elapsed_time, sorted_list = benchmark(quicksort, test)
-    print(f"Time elapsed: {elapsed_time}")
-    print("After:", "sorted" if is_sorted(sorted_list) else "not sorted")
+    test_sorting_algorithms(data.copy(), "Insertion Sort", insertion_sort)
+    test_sorting_algorithms(data.copy(), "Selection Sort", selection_sort)
+    test_sorting_algorithms(data.copy(), "Bubble Sort", bubble_sort)
+    test_sorting_algorithms(data.copy(), "Mergesort", mergesort)
+    test_sorting_algorithms(data.copy(), "Quicksort", quicksort)
+    test_sorting_algorithms(data.copy(), "Timsort", timsort)
 
 
 if __name__ == "__main__":
