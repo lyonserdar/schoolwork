@@ -1,8 +1,5 @@
 """
-Course List Implementation
-TODO: fix docstring
-TODO: cleanup iterator 
-TODO: complete course print
+Course List 
 """
 
 
@@ -126,8 +123,12 @@ class CourseList:
 
     def __str__(self):
         """Returns a string with each course"""
-        # TODO: fix the output
-        return "Output"
+        current = self.head
+        list_string = ""
+        while current:
+            list_string += str(current) + "\n"
+            current = current.next
+        return list_string
 
     def __iter__(self):
         """Creates an iterable"""
@@ -137,10 +138,3 @@ class CourseList:
         while current:
             yield current
             current = current.next
-
-    # def __next__(self):
-    #     """Returns the next iterable"""
-    #     if not self.__current.next:
-    #         raise StopIteration
-    #     self.__current = self.__current.next
-    #     return self.__current

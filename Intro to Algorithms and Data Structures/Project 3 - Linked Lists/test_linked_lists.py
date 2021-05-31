@@ -115,21 +115,16 @@ def test_iterate_list():
         totalCourses += 1
     assert totalCourses == 21
 
-
 def test_code_quality():
-    from pylint import epylint as lint
-    import re
+    from pylint.lint import Run
     
-    (pylint_stdout, pylint_stderr) = lint.py_run('course.py', return_std=True)
+    results = Run(['course.py'], exit=False)
     expected = 8.5
-    actual = pylint_stdout.getvalue()
-    x = re.findall('[0-9]+', actual)[0]
-    x = float(x)
-    assert x >= expected
+    actual = results.linter.stats['global_note']
+    assert actual >= expected
     
-    (pylint_stdout, pylint_stderr) = lint.py_run('courselist.py', return_std=True)
+    results = Run(['courselist.py'], exit=False)
     expected = 8.5
-    actual = pylint_stdout.getvalue()
-    x = re.findall('[0-9]+', actual)[0]
-    x = float(x)
-    assert x >= expected
+    actual = results.linter.stats['global_note']
+    assert actual >= expected
+    

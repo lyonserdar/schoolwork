@@ -1,7 +1,5 @@
 """
-Course Implementation
-TODO: fix docstring
-TODO: complete course print
+Course Node
 """
 
 
@@ -74,5 +72,7 @@ class Course:
 
     def __str__(self):
         """Function def"""
-        return f"CS{self.course_number} {self.course_name} Grade:{self.course_grade} \
-            Credit Hours:{self.course_credit}"
+        return (
+            f"CS{self.course_number} {self.course_name} Grade:{self.course_grade} "
+            f"Credit Hours:{self.course_credit}"
+        )

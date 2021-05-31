@@ -1,4 +1,4 @@
-''' 
+'''
 Project Name: Project 2: Sort Test Code
 Author: George Rudolph
 Date: 3 Jul 2020
@@ -8,12 +8,12 @@ for this project, and is used to automate grading. The fact that a submission pa
 means that some properites have been verified--it does **not** mean that the code is **TESTED**,
 industrial-strength code.
 
-This test code purposely avoids using requiring unit testing modules like pytest and unitttest, 
+This test code purposely avoids using requiring unit testing modules like pytest and unitttest,
 because built-in assertions are sufficient here.
-However, this file **can** be run without modification using pytest, to take advantage of 
+However, this file **can** be run without modification using pytest, to take advantage of
 reporting capabilities.
 
-This file should be made available to students so that they can test the code 
+This file should be made available to students so that they can test the code
 in their copy of search.py. They should not modify this file test_search.py.
 
 To run test_search from command line:
@@ -29,35 +29,35 @@ def test_sort_times():
     seed(42)
     data = sample(range(data_size * 3), k=data_size)
 
-    # selection sort        
+    # selection sort
     test = data.copy()
     start = perf_counter()
     test = selection_sort(test)
     selection_elapsed_time = perf_counter() - start
     assert is_sorted(test)
 
-    # insertion sort        
+    # insertion sort
     test = data.copy()
     start = perf_counter()
     test = insertion_sort(test)
     insertion_elapsed_time = perf_counter() - start
     assert is_sorted(test)
 
-    # merge sort        
+    # merge sort
     test = data.copy()
     start = perf_counter()
     test = mergesort(test)
     merge_elapsed_time = perf_counter() - start
     assert is_sorted(test)
 
-    # quick sort        
+    # quick sort
     test = data.copy()
     start = perf_counter()
     test = quicksort(test)
     quick_elapsed_time = perf_counter() - start
     assert is_sorted(test)
 
-    # tim sort        
+    # tim sort
     test = data.copy()
     start = perf_counter()
     test.sort()
@@ -83,15 +83,12 @@ def test_sorted_list():
     assert is_sorted(test_data)
 
 def test_code_quality():
-    from pylint import epylint as lint
-    import re
-    
-    (pylint_stdout, pylint_stderr) = lint.py_run('sort.py', return_std=True)
+    from pylint.lint import Run
+
+    results = Run(['sort.py'], exit=False)
     expected = 8.5
-    actual = pylint_stdout.getvalue()
-    x = re.findall('[0-9]+', actual)[0]
-    x = float(x)
-    assert x >= expected
+    actual = results.linter.stats['global_note']
+    assert actual >= expected
 
 
 if __name__ == "__main__":
