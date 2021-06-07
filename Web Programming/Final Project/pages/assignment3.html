@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Assignment 3</title>
+  </head>
+
+  <body>
+    <h1>Assignment 3: Model and view for game grid and pieces</h1>
+    <h2>Preliminary Software Design for Sudoku</h2>
+    <h3>Models</h3>
+    <p>
+      Game puzzles and their solutions stored in a JSON. There are three
+      difficulty levels and game board will be selected randomly from selected
+      difficulty bucket. "0" character signifies empty slot that user needs to
+      provide.
+    </p>
+    <pre>
+      <code>
+        const PUZZLES = {
+          easy: [
+            {
+              puzzle:
+                "070000043040009610800634900094052000358460020000800530080070091902100005007040802",
+              solution:
+                "679518243543729618821634957794352186358461729216897534485276391962183475137945862",
+            },
+            ...
+          ],
+          medium: [
+            ...
+          ],
+          hard: [
+            ...
+          ],
+        };
+      </code>
+    </pre>
+    <p>"selectOption" is number selection(1-9) that user picks.</p>
+    <p>
+      "boardTable" is a reference to the board table element. This will be used
+      to update the table element once it's created.
+    </p>
+    <p>"puzzle" This is used to create the initial board.</p>
+    <p>
+      "solution" This is puzzle's solution, this is used to check if user input
+      is correct.
+    </p>
+    <pre>
+      <code>
+        var selectOption = null;
+        var boardTable = null;
+        var puzzle = null;
+        var solution = null;
+      </code>
+    </pre>
+    <h3>Functions/Methods</h3>
+    <h4>createGameSelectOptions():</h4>
+    <p>
+      This creates the button group for the number selection(1-9), selection
+      will be stored in selectOption variable.
+    </p>
+    <h4>createGameBoard(rows, cols):</h4>
+    <p>This creates a table element with given rows and columns.</p>
+    <h4>setupInitialBoard(board):</h4>
+    <p>
+      Initial board setup with puzzle's given numbers highlighted and for the
+      remaining user numbers onclick handlers created.
+    </p>
+    <h4>getSelectedDifficulty():</h4>
+    <p>Checks the radio buttons that selects the difficulty.</p>
+    <h4>getBoardValues(difficulty):</h4>
+    <p>
+      Create a board with given difficulty. Puzzle for the board will be
+      selected randomly.
+    </p>
+    <h4>startNewGame():</h4>
+    <p>Starts a new game. Calls all the functions needed to start the game.</p>
+    <h4>main():</h4>
+    <p>Creates the html elements once window is loaded.</p>
+  </body>
+</html>
