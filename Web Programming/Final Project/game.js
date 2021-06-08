@@ -321,12 +321,13 @@ var username = "";
 var timestamp = "";
 function clearLocalStorage() {
   localStorage.removeItem("cs2550timestamp");
+  assignment5Storage();
 }
 
 function assignment5Storage() {
   const user = JSON.parse(localStorage.getItem("cs2550timestamp"));
-  document.getElementById("username").textContent = user.userName;
-  document.getElementById("timestamp").textContent = user.timestamp;
+  document.getElementById("username").textContent = user?.userName;
+  document.getElementById("timestamp").textContent = user?.timestamp;
 }
 
 function main() {
