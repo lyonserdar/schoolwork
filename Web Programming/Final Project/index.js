@@ -20,7 +20,7 @@ function login() {
       if (this.response?.result == "invalid") {
         authErrorEl.textContent = "Invalid Credentials.";
       } else {
-        localStorage.setItem("cs2550timestamp", this.response);
+        localStorage.setItem("cs2550timestamp", JSON.stringify(this.response));
         window.location.replace("game.html");
       }
     } else {

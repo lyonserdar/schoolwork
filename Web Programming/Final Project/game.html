@@ -16,7 +16,8 @@
         <div class="debug" id="debug">
           <h4>Debug</h4>
           <div id="assignment-4-anim"></div>
-          <p id="cell-coords"></p>
+          <p id="cell-coords">Cell Coords: (,)</p>
+          <p class="info"><i>Start a game to see the coords!</i></p>
           <input type="text" id="assignment-4-input" value="Type Here First" />
           <button onclick="assignment4Input()">Then Click Here</button>
           <p id="assignment-4-input-text"></p>
@@ -46,6 +47,17 @@
         <div id="game-board"></div>
       </div>
       <div class="right-container">
+        <div class="debug" id="auth">
+          <h4>Auth</h4>
+          <p>Username:</p>
+          <p><i id="username"></i></p>
+          <p>Timestamp:</p>
+          <p><i id="timestamp"></i></p>
+          <button onclick="clearLocalStorage()">Clear Local Storage</button>
+          <p class="info">
+            <i>Login at Project Page to see your credentials.</i>
+          </p>
+        </div>
         <div id="game-select-options"></div>
       </div>
     </main>
