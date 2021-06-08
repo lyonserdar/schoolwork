@@ -1,74 +1,5 @@
 // Constants
-const PUZZLES = {
-  debug: [
-    {
-      puzzle:
-        "679518243543729618821634957794352186358461729216897534485276391962183475137945860",
-      solution:
-        "679518243543729618821634957794352186358461729216897534485276391962183475137945862",
-    },
-  ],
-  easy: [
-    {
-      puzzle:
-        "070000043040009610800634900094052000358460020000800530080070091902100005007040802",
-      solution:
-        "679518243543729618821634957794352186358461729216897534485276391962183475137945862",
-    },
-    {
-      puzzle:
-        "301086504046521070500000001400800002080347900009050038004090200008734090007208103",
-      solution:
-        "371986524846521379592473861463819752285347916719652438634195287128734695957268143",
-    },
-    {
-      puzzle:
-        "048301560360008090910670003020000935509010200670020010004002107090100008150834029",
-      solution:
-        "748391562365248791912675483421786935589413276673529814834962157296157348157834629",
-    },
-  ],
-  medium: [
-    {
-      puzzle:
-        "008317000004205109000040070327160904901450000045700800030001060872604000416070080",
-      solution:
-        "298317645764285139153946278327168954981453726645792813539821467872634591416579382",
-    },
-    {
-      puzzle:
-        "040890630000136820800740519000467052450020700267010000520003400010280970004050063",
-      solution:
-        "142895637975136824836742519398467152451328796267519348529673481613284975784951263",
-    },
-    {
-      puzzle:
-        "561092730020780090900005046600000427010070003073000819035900670700103080000000050",
-      solution:
-        "561492738324786195987315246659831427418279563273564819135928674746153982892647351",
-    },
-  ],
-  hard: [
-    {
-      puzzle:
-        "310450900072986143906010508639178020150090806004003700005731009701829350000645010",
-      solution:
-        "318457962572986143946312578639178425157294836284563791425731689761829354893645217",
-    },
-    {
-      puzzle:
-        "800134902041096080005070010008605000406310009023040860500709000010080040000401006",
-      solution:
-        "867134952241596783395872614978625431456318279123947865534769128619283547782451396",
-    },
-    {
-      puzzle:
-        "165293004000001632023060090009175000500900018002030049098000006000000950000429381",
-      solution:
-        "165293874974851632823764195489175263536942718712638549398517426241386957657429381",
-    },
-  ],
-};
+const PUZZLE_URL = "./data/puzzles.json";
 
 // Debug Elements
 var debugEl = document.getElementById("debug");
@@ -87,6 +18,7 @@ var grid = [[], [], [], [], [], [], [], [], []];
 var gameRunningTimeInSec = 0;
 var isGameOver = true;
 var gameTimer = null;
+var puzzles = null;
 
 function createGameSelectOptions() {
   let gameSelectOptionsEl = document.getElementById("game-select-options");
@@ -236,7 +168,7 @@ function setupInitialBoard(board) {
 
 function getBoardValues(difficulty) {
   let board =
-    PUZZLES[difficulty][Math.floor(Math.random() * PUZZLES[difficulty].length)];
+    puzzles[difficulty][Math.floor(Math.random() * puzzles[difficulty].length)];
   return { puzzle: board.puzzle, solution: board.solution };
 }
 
@@ -324,13 +256,40 @@ function clearLocalStorage() {
   assignment5Storage();
 }
 
+// Assignment 5
 function assignment5Storage() {
   const user = JSON.parse(localStorage.getItem("cs2550timestamp"));
   document.getElementById("username").textContent = user?.userName;
   document.getElementById("timestamp").textContent = user?.timestamp;
 }
 
+// Assignment 6
+function fetchPuzzles() {
+  let xhr = new XMLHttpRequest();
+  xhr.open("GET", PUZZLE_URL);
+  xhr.responseType = "json";
+  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  xhr.onload = function () {
+    if (this.status == 200) {
+      puzzles = this.response;
+      document.getElementById("game-data").textContent =
+        JSON.stringify(puzzles);
+    } else {
+      authErrorEl.textContent = "Server Error.";
+    }
+  };
+  xhr.send();
+}
+
+function toggleDebug() {
+  let debugEls = document.querySelectorAll(".debug");
+  debugEls.forEach((el) => {
+    el.classList.toggle("hidden");
+  });
+}
+
 function main() {
+  fetchPuzzles();
   createGameSelectOptions();
   createGameBoard(9, 9);
   listenStartNewGame();
