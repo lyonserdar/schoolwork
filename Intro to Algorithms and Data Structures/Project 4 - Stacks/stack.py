@@ -1,18 +1,21 @@
-"""
-Stack
-TODO: Write the docstring
-"""
+#!/usr/bin/env python
+
+# ======================================================================================
+# * Project 4 - Stack
+# ======================================================================================
+# Author: Ali Serdar Aydogdu
+# Email: lyonserdar@gmail.com
+# UVU ID: 10593855
+# Class: CS 2420-601
+# Date Created: 05/12/2021
+# Date Last Modified: 06/2/2021
 
 
 class Stack:
-    """
-    Stack
-    """
+    """Stack"""
 
     class Node:
-        """
-        Node
-        """
+        """Node"""
 
         def __init__(self, data):
             """Initialize node"""

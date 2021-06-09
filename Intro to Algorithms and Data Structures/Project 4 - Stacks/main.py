@@ -1,33 +1,25 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-"""
-I declare that the following source code was written solely by me. I understand that
-copying any source code, in whole or in part, constitutes cheating, and that I will
-receive a zero on this project if I am found in violation of this policy. 
--
-TODO: complete the project description
-"""
 
-# * Project 4 - A Stack Machine to Evaluate Expressions
+# ======================================================================================
+# * Project 4 - Main
+# ======================================================================================
+# Author: Ali Serdar Aydogdu
+# Email: lyonserdar@gmail.com
+# UVU ID: 10593855
+# Class: CS 2420-601
+# Date Created: 05/12/2021
+# Date Last Modified: 06/2/2021
 
-__project__ = "Project 4 - A Stack Machine to Evaluate Expressions"
-__author__ = "Ali Serdar Aydogdu"
-__email__ = "lyonserdar@gmail.com"
-__date__ = "6/20/2021"
-__divider__ = "------------------------------------------------------------------------"
-
+# Imports
 from stack import Stack
 
+# Constants
 INPUT_FILE = "data.txt"
 OUTPUT_FILE = "output.txt"
 
 
 def in2post(expression):
-    """
-    in2post
-    """
-    # TODO: If the expression is not valid, raise SyntaxError. If the parameter expr is
-    # not a string, raise a ValueError.
+    """in2post"""
     if not type(expression) is str:
         raise ValueError
     stack = Stack()
@@ -63,11 +55,7 @@ def in2post(expression):
 
 
 def eval_postfix(expression):
-    """
-    eval_postfix
-    """
-    # TODO: If the expression is not valid, raise SyntaxError. If the parameter expr is
-    # not a string, raise a ValueError.
+    """eval_postfix"""
     if not type(expression) is str:
         raise ValueError
     if not all([len(item) < 2 for item in expression.split(" ")]):
@@ -94,10 +82,6 @@ def eval_postfix(expression):
 
 def main():
     """This is the main function"""
-    print(__divider__)
-    print(__project__)
-    print(__divider__)
-
     with open(INPUT_FILE, "r") as input_file:
         with open(OUTPUT_FILE, "w") as output_file:
             expressions = []

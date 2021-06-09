@@ -1,22 +1,20 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-"""
-I declare that the following source code was written solely by me. I understand that
-copying any source code, in whole or in part, constitutes cheating, and that I will
-receive a zero on this project if I am found in violation of this policy.
-"""
 
-# * Project 3 - Student Class List
+# ======================================================================================
+# * Project 3 - Main
+# ======================================================================================
+# Author: Ali Serdar Aydogdu
+# Email: lyonserdar@gmail.com
+# UVU ID: 10593855
+# Class: CS 2420-601
+# Date Created: 05/12/2021
+# Date Last Modified: 06/2/2021
 
-__project__ = "Project 3 - Student Class List"
-__author__ = "Ali Serdar Aydogdu"
-__email__ = "lyonserdar@gmail.com"
-__date__ = "5/31/2021"
-__divider__ = "------------------------------------------------------------------------"
-
+# Imports
 from course import Course
 from courselist import CourseList
 
+# Constants
 FILENAME = "data.txt"
 
 
@@ -44,10 +42,6 @@ def display_report(course_list):
 
 def main():
     """This is the main function"""
-    print(__divider__)
-    print(__project__)
-    print(f"by {__author__}")
-    print(__divider__)
     data = read_data(FILENAME)
     course_list = organize_data(data)
     display_report(course_list)
