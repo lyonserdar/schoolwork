@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Tile Map Editor</title>
+</head>
+
+<body>
+  <div class="card">
+    <header>
+      <h1>Tile Map Editor</h1>
+      <div>
+        <button class="button-link" onclick="clearCanvas()">Clear Canvas</button>
+        <button class="button-primary" onclick="exportImage()">Export Tile Map</button>
+      </div>
+    </header>
+    <div class="card-body">
+      <aside>
+        <label>Tiles</label>
+        <div class="tileset-container">
+          <img id="tileset-source" crossorigin />
+          <div class="tileset-container-selection"></div>
+        </div>
+      </aside>
+      <div class="card-right-column">
+        <canvas width="480" height="480"></canvas>
+        <p class="instructions">
+          <strong>Click</strong> to paint.
+          <strong>Shift+Click</strong> to remove.
+        </p>
+        <div>
+          <label>Editing Layers:</label>
+          <ul class="editing-layers">
+            <li>
+              <button class="editing-layer" onclick="setLayer(2)" tile-layer="2">Top Layer</button>
+            </li>
+            <li>
+              <button class="editing-layer" onclick="setLayer(1)" tile-layer="1">Middle Layer</button>
+            </li>
+            <li>
+              <button class="editing-layer" onclick="setLayer(0)" tile-layer="0">Bottom Layer</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+
+</html>

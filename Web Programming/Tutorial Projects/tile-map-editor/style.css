@@ -1,0 +1,119 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* html {
+  height: 100%;
+} */
+
+body {
+  font-family: 'Source Sans Pro', sans-serif;
+  padding: 1em;
+  background: lightgoldenrodyellow;
+  display: flex;
+  justify-content: space-around;
+  color: darkslategray;
+}
+
+.card {
+  background: white;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+  padding-bottom: 16px;
+}
+
+.card header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.card aside {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.card-body {
+  display: flex;
+}
+
+.card-right-column {
+  padding-right: 16px;
+}
+
+canvas {
+  background: lightsteelblue;
+}
+
+.tileset-container {
+  position: relative;
+}
+
+.tileset-container-selection {
+  position: absolute;
+  outline: 3px solid cyan;
+  left: 0;
+  top: 0;
+  width: 32px;
+  height: 32px;
+}
+
+.instructions {
+  font-size: 0.8em;
+  color: darkslategray;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.button-link {
+  /* appearance: none; */
+  text-decoration: underline;
+  background: transparent;
+  color: gray;
+  border: 0;
+  /* outline: 0; */
+  cursor: pointer;
+}
+
+.button-primary {
+  border: 0;
+  background: blue;
+  color: white;
+  border-top:4px solid transparent;
+  border-bottom: 4px solid #3166c7;
+  border-radius: 6px;
+  /* outline: 0; */
+  padding: 6px 16px;
+  cursor: pointer;
+}
+
+label {
+  text-transform: uppercase;
+  margin-bottom: 0.5em;
+  font-weight: bold;
+  display: block;
+}
+
+.editing-layers {
+  list-style-type: none;
+}
+
+.editing-layers button {
+  font-family: inherit;
+  background: transparent;
+  border: 0;
+  padding: 8px 0;
+  display: block;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.editing-layers button .active {
+  font-weight:bold;
+  color: blue;
+}
