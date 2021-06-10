@@ -55,12 +55,12 @@ def test_keys():
     keys2 = hm.keys()
     keys2.sort()
     assert keys == keys2
-    
+
 def test_get_set():
     hm = HashMap()
     with pytest.raises(KeyError):
         hm.get((0,0))
-    
+
     keys = [(r,r) for r in (range(10))]
     values = list(range(1, 11))
     for k,v in zip(keys,values):
@@ -78,14 +78,11 @@ def test_rehashing():
         hm.set(k,v)
     assert hm.size() == 10
     assert hm.capacity() == 13
-        
+
 def test_code_quality():
-    from pylint import epylint as lint
-    import re
-    
-    (pylint_stdout, pylint_stderr) = lint.py_run('hashmap.py', return_std=True)
+    from pylint.lint import Run
+
+    results = Run(['hashmap.py'], exit=False)
     expected = 8.5
-    actual = pylint_stdout.getvalue()
-    x = re.findall('[0-9]+', actual)[0]
-    x = float(x)
-    assert x >= expected
+    actual = results.linter.stats['global_note']
+    assert actual >= expected
