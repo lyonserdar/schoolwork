@@ -1,17 +1,35 @@
-"""
-Project:
-Author: 
-Course: 
-Date: 
-
-Description:
-
-Lessons Learned:
+#!/usr/bin/env python
 
 """
+Project: 4 - Binary Search Tree
+Author: Ali Serdar Aydogdu
+Course: CS 2420-601
+Date Created: 05/12/2021
+Date Last Modified: 06/09/2021
+"""
+
 from pathlib import Path
 from string import whitespace, punctuation
 from bst import BST
+
+
+INPUT_FILE = "around-the-world-in-80-days-3 copy.txt"
+PUNCTUATIONS = (
+    "\n",
+    " ",
+    ".",
+    ",",
+    '"',
+    ":",
+    ";",
+    "!",
+    "'",
+    "(",
+    ")",
+    "-",
+    "?",
+    "`",
+)
 
 
 class Pair:
@@ -46,10 +64,10 @@ class Pair:
         return self.letter >= other.letter
 
     def __add__(self, other):
-        self.count += other.count
+        return Pair(self.letter, self.count + other.count)
 
     def __sub__(self, other):
-        self.count -= other.count
+        return Pair(self.letter, self.count - other.count)
 
     def __repr__(self):
         return f"({self.letter}, {self.count})"
@@ -65,30 +83,24 @@ def make_tree():
     :param: None
     :returns: A binary search tree
     """
-    pass
+    tree = BST()
+
+    with open(INPUT_FILE, "r") as f:
+        while True:
+            c = f.read(1)
+            if not c:
+                break
+            if c not in PUNCTUATIONS:
+                tree.add(Pair(c))
+
+    return tree
 
 
 def main():
     """ 
     Program kicks off here.
     """
-    tree = BST()
-
-    tree.add(Pair("d", 4))
-    tree.add(Pair("e", 5))
-    tree.add(Pair("a", 1))
-    tree.add(Pair("b", 2))
-    tree.add(Pair("c", 3))
-    tree.add(Pair("f", 6))
-    tree.add(Pair("g", 7))
-
-    print(tree.inorder())
-
-    print(tree.height())
-
-    print(tree.find(Pair("d")))
-
-    print(tree.size())
+    make_tree()
 
 
 if __name__ == "__main__":
