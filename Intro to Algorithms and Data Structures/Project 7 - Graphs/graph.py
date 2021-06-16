@@ -156,6 +156,20 @@ class Graph:
             if not found:
                 vertex = stack.pop()
 
+    def dfs_recursive(self, starting_vertex):
+        if starting_vertex not in self.vertices:
+            raise ValueError
+
+        visited = set()
+        self.__dfs_recursive(starting_vertex, visited)
+
+    def __dfs_recursive(self, current, visited):
+        if current not in visited:
+            visited.add(current)
+            print(current, end="")
+            for neighbor in self.vertices[current].get_neighbors():
+                self.__dfs_recursive(neighbor.get_label(), visited)
+
     def bfs(self, starting_vertex):
         """
         Returns a generator gor traversing the graph in breadth-first order
@@ -190,52 +204,48 @@ class Graph:
         Returns a tuple (path length, the list of vertices on the path from dest
         back to src).
         If no path exists, returns the tuple.(math.inf, empty list)
-        TODO: Fix this to match dsp_all
         """
         if src not in self.vertices:
             raise ValueError
         if dest not in self.vertices:
             raise ValueError
 
-        dist = {}
-        prev = {}
-
+        dist = {vertex: math.inf for vertex in self.vertices}
+        prev = {vertex: None for vertex in self.vertices}
         dist[src] = 0
-        prev[src] = None
 
-        unvisited_vertices = {}
-
-        for vertex in self.vertices:
-            if vertex != src:
-                dist[vertex] = math.inf
-                prev[vertex] = None
-            unvisited_vertices[vertex] = math.inf
+        unvisited_vertices = {src: dist[src]}
 
         while len(unvisited_vertices):
-            selected_vertex = min(unvisited_vertices, key=unvisited_vertices.get)
-            del unvisited_vertices[selected_vertex]
+            current_vertex = min(unvisited_vertices, key=unvisited_vertices.get)
+            current_distance = unvisited_vertices[current_vertex]
+            del unvisited_vertices[current_vertex]
 
-            if selected_vertex == dest:
-                break
+            if current_distance > dist[current_vertex]:
+                continue
 
-            for neighbor in self.vertices[selected_vertex].get_neighbors():
-                alternative = dist[selected_vertex] + self.vertices[
-                    selected_vertex
-                ].get_weight(neighbor)
-                if alternative < dist[neighbor.get_label()]:
-                    dist[neighbor.get_label()] = alternative
-                    prev[neighbor.get_label()] = selected_vertex
+            for neighbor in self.vertices[current_vertex].get_neighbors():
+                distance = current_distance + self.vertices[current_vertex].get_weight(
+                    neighbor
+                )
+                neighbor = neighbor.get_label()
 
-        if dist[dest] == math.inf:
-            return (math.inf, [])
+                if distance < dist[neighbor]:
+                    dist[neighbor] = distance
+                    unvisited_vertices[neighbor] = distance
+                    prev[neighbor] = current_vertex
 
-        path = [dest]
-        selected_path_vertex = dest
-        while selected_path_vertex != src:
-            path.append(prev[selected_path_vertex])
-            selected_path_vertex = prev[selected_path_vertex]
+        dsp_dict = {}
 
-        return dist[dest], path[::-1]
+        for vertex, distance in dist.items():
+            if distance == math.inf:
+                dsp_dict[vertex] = []
+            else:
+                dsp_dict[vertex] = self.__get_path_from_prev(prev, src, vertex)
+
+        path = dsp_dict[dest]
+        distance = dist[dest]
+        return distance, path
 
     def dsp_all(self, src):
         """
@@ -283,6 +293,9 @@ class Graph:
         return dsp_dict
 
     def __get_path_from_prev(self, prev, src, dest):
+        """
+        Returns the path from given prev dictionary
+        """
         path = [dest]
         selected_path_vertex = dest
         while selected_path_vertex != src:
@@ -311,14 +324,6 @@ class Graph:
 def main():
     """
     Main
-    1.Construct the graph shown in Figure 1 using your ADT.
-    2.Print it to the console in GraphViz notation as shown in Figure 1.
-    3.Print results of DFS starting with vertex “A” as shown in Figure 2.
-    4.BFS starting with vertex “A” as shown in Figure 3.
-    5.Print the path from vertex “A” to vertex “F” (not shown here) using Dijkstra's
-       Shortest Path algorithm (DSP) as a string like #3 and #4.
-    6.Print the shortest paths from “A” to each other vertex, one path per line using
-       DSP.
     """
     g = Graph()
     g.add_vertex("A")
@@ -357,6 +362,10 @@ def main():
 
     print("All shortest paths from vertex A")
     print(g.dsp_all("A"))
+
+    print("DFS starting with vertex A (Recursive)")
+    g.dfs_recursive("A")
+    print()
 
 
 if __name__ == "__main__":
