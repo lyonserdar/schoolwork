@@ -190,6 +190,7 @@ class Graph:
         Returns a tuple (path length, the list of vertices on the path from dest
         back to src).
         If no path exists, returns the tuple.(math.inf, empty list)
+        TODO: Fix this to match dsp_all
         """
         if src not in self.vertices:
             raise ValueError
@@ -246,10 +247,49 @@ class Graph:
         if src not in self.vertices:
             raise ValueError
 
-        # distances = {vertex: math.inf for _, vertex in self.vertices.items()}
-        # distances[self.vertices[src]] = 0
+        dist = {vertex: math.inf for vertex in self.vertices}
+        prev = {vertex: None for vertex in self.vertices}
+        dist[src] = 0
 
-        return {}
+        unvisited_vertices = {src: dist[src]}
+
+        while len(unvisited_vertices):
+            current_vertex = min(unvisited_vertices, key=unvisited_vertices.get)
+            current_distance = unvisited_vertices[current_vertex]
+            del unvisited_vertices[current_vertex]
+
+            if current_distance > dist[current_vertex]:
+                continue
+
+            for neighbor in self.vertices[current_vertex].get_neighbors():
+                distance = current_distance + self.vertices[current_vertex].get_weight(
+                    neighbor
+                )
+                neighbor = neighbor.get_label()
+
+                if distance < dist[neighbor]:
+                    dist[neighbor] = distance
+                    unvisited_vertices[neighbor] = distance
+                    prev[neighbor] = current_vertex
+
+        dsp_dict = {}
+
+        for vertex, distance in dist.items():
+            if distance == math.inf:
+                dsp_dict[vertex] = []
+            else:
+                dsp_dict[vertex] = self.__get_path_from_prev(prev, src, vertex)
+
+        return dsp_dict
+
+    def __get_path_from_prev(self, prev, src, dest):
+        path = [dest]
+        selected_path_vertex = dest
+        while selected_path_vertex != src:
+            path.append(prev[selected_path_vertex])
+            selected_path_vertex = prev[selected_path_vertex]
+
+        return path[::-1]
 
     def __str__(self):
         """
@@ -290,34 +330,33 @@ def main():
 
     g.add_edge("A", "B", 2)
     g.add_edge("A", "F", 9)
-
     g.add_edge("B", "F", 6)
     g.add_edge("B", "D", 15)
     g.add_edge("B", "C", 8)
-
     g.add_edge("C", "D", 1)
-
     g.add_edge("E", "C", 7)
     g.add_edge("E", "D", 3)
-
     g.add_edge("F", "B", 6)
     g.add_edge("F", "E", 3)
 
-    gen = g.bfs("A")
-    data = [x for x in gen]
-    print(data)
-
-    gen = g.dfs("A")
-    data = [x for x in gen]
-    print(data)
-
-    gen = g.dfs("C")
-    data = [x for x in gen]
-    print(data)
-
+    print("Graph printed using GraphViz dot notation")
     print(g)
 
+    print("DFS starting with vertex A")
+    for vertex in g.dfs("A"):
+        print(vertex, end="")
+    print()
+
+    print("BFS starting with vertex A")
+    for vertex in g.bfs("A"):
+        print(vertex, end="")
+    print()
+
+    print("Shortest path from vertex A to vertex F")
     print(g.dsp("A", "F"))
+
+    print("All shortest paths from vertex A")
+    print(g.dsp_all("A"))
 
 
 if __name__ == "__main__":
