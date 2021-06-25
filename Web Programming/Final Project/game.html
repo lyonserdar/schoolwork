@@ -5,25 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="game.css" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <script src="game.js" defer></script>
     <title>Sudoku</title>
   </head>
 
   <body>
-    <header>
-      <button onclick="toggleDebug()">Toggle Debug</button>
-    </header>
     <main class="game">
       <div class="left-container">
-        <div class="debug hidden" id="debug">
-          <h4>Debug</h4>
-          <div id="assignment-4-anim"></div>
-          <p id="cell-coords">Cell Coords: (,)</p>
-          <p class="info"><i>Start a game to see the coords!</i></p>
-          <input type="text" id="assignment-4-input" value="Type Here First" />
-          <button onclick="assignment4Input()">Then Click Here</button>
-          <p id="assignment-4-input-text"></p>
-        </div>
         <div id="game-settings">
           <section id="game-setup">
             <div>
@@ -38,6 +27,9 @@
           </section>
           <section>
             <button id="start-new-game">New Game</button>
+            <button id="start-new-game-last-board">
+              New Game with Last Puzzle
+            </button>
           </section>
           <section id="game-stats">
             <h4>Time</h4>
@@ -49,17 +41,6 @@
         <div id="game-board"></div>
       </div>
       <div class="right-container">
-        <div class="debug hidden" id="auth">
-          <h4>Auth</h4>
-          <p>Username:</p>
-          <p><i id="username"></i></p>
-          <p>Timestamp:</p>
-          <p><i id="timestamp"></i></p>
-          <button onclick="clearLocalStorage()">Clear Local Storage</button>
-          <p class="info">
-            <i>Login at Project Page to see your credentials.</i>
-          </p>
-        </div>
         <div id="game-select-options"></div>
       </div>
     </main>
