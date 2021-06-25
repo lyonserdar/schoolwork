@@ -13,7 +13,7 @@ from string import whitespace, punctuation
 from bst import BST
 
 
-INPUT_FILE = "around-the-world-in-80-days-3 copy.txt"
+INPUT_FILE = "around-the-world-in-80-days-3.txt"
 PUNCTUATIONS = (
     "\n",
     " ",
