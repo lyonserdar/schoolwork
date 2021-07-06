@@ -18,6 +18,7 @@ Date Last Modified: 7/3/2021
 
 memory = [0] * 100
 accumulator = 0
+instruction_counter = 0
 opcodes = {
     0: "SKIP",
     10: "READ",
@@ -77,15 +78,26 @@ def execute():
     Executes the program
     Author: Ali Aydogdu
     """
+    global instruction_counter
     opcode = 0
     location = 0
+    halt_flag = False
+
+    for address in memory:
+        if opcodes[address // 100] == "HALT":
+            halt_flag = True
+            break
+
+    if not halt_flag:
+        print(f"Please include HALT(4300) command in code!")
+        return
 
     while opcodes[opcode] != "HALT":
+        instruction_counter += 1
         insruction = memory[location]
         opcode = insruction // 100
         operand = insruction % 100
         if opcode == 43:
-            print("End!")
             break
         if opcode == 0:
             location += 1
@@ -95,6 +107,16 @@ def execute():
             location = address
         else:
             location += 1
+
+
+def end():
+    """
+    Displays the end stats
+    Author: Ali Aydogdu
+    """
+    print("-*-Execution Terminated-*-")
+    print(f"Accumulator: {accumulator}")
+    print(f"Instruction Count: {instruction_counter}")
 
 
 # Implementation of DEBUG instructions
@@ -153,10 +175,10 @@ def read(operand):
 
 def write(operand):
     """
-    TODO: Missing
-    Author: 
+    ? Outputs the value of specified memory location to console 
+    Author: Ali Aydogdu
     """
-    pass
+    print(f"Memory address '{operand}' contains: {memory[operand]}")
 
 
 def load(operand):
@@ -164,74 +186,93 @@ def load(operand):
     Loads a word from a specific location in memory into the accumulator
     Author: Ali Aydogdu
     """
-    print(f"Memory address '{operand}' contains: {memory[operand]}")
+    global accumulator
+    print(
+        f"Memory address '{operand}' that contains {memory[operand]} loaded to accumulator"
+    )
     accumulator = memory[operand]
-    pass
 
 
 def store(operand):
     """
-    TODO: Missing
-    Author: 
+    ? Stores the accumulator to specified memory
+    Author: Ali Aydogdu
     """
-    pass
+    global accumulator
+    memory[operand] = accumulator
+    print(f"Value {accumulator} stored to memory address '{operand}'")
 
 
 def add(operand):
     """
     Adds a word from a specific location in memory to the word in the accumulator
     (leave the result in the accumulator)
-    Author: 
+    Author: Ali Aydogdu
     """
-    pass
+    global accumulator
+    accumulator = memory[operand] + accumulator
+    print(f"numbers added: {accumulator}")
 
 
 def subtract(operand):
     """
     TODO: Missing
-    Author: 
+    Author: Ali Aydogdu
     """
-    pass
+    global accumulator
+    print("DEBUG", memory[operand], accumulator, memory[operand] - accumulator)
+    accumulator -= memory[operand]
+    print(f"numbers subtracted: {accumulator}")
 
 
 def divide(operand):
     """
     TODO: Missing
-    Author: 
+    Author: Ali Aydogdu
     """
-    pass
+    global accumulator
+    accumulator = memory[operand] / accumulator
+    print(f"numbers divided: {accumulator}")
 
 
 def multiply(operand):
     """
     TODO: Missing
-    Author: 
+    Author: Ali Aydogdu
     """
-    pass
+    global accumulator
+    accumulator = memory[operand] * accumulator
+    print(f"numbers multiplied: {accumulator}")
 
 
 def branch(operand):
     """
     Branch to a specific location in memory
-    Author: 
+    Author: Ali Aydogdu
     """
-    pass
+    global accumulator
+    if accumulator > 0:
+        return operand
 
 
 def branchneg(operand):
     """
     TODO: Missing
-    Author: 
+    Author: Ali Aydogdu
     """
-    pass
+    global accumulator
+    if accumulator < 0:
+        return operand
 
 
 def branchzero(operand):
     """
     TODO: Missing
-    Author: 
+    Author: Ali Aydogdu
     """
-    pass
+    global accumulator
+    if accumulator == 0:
+        return operand
 
 
 # This is located here because functions needed to be declared before this dictionary
@@ -261,6 +302,7 @@ def main():
     initialize()
     start()
     execute()
+    end()
     memdump()
 
 
