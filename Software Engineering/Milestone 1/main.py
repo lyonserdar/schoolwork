@@ -210,7 +210,7 @@ def add(operand):
     Author: Ali Aydogdu
     """
     global accumulator
-    accumulator = memory[operand] + accumulator
+    accumulator += memory[operand]
     print(f"numbers added: {accumulator}")
 
 
@@ -231,7 +231,7 @@ def divide(operand):
     Author: Ali Aydogdu
     """
     global accumulator
-    accumulator = memory[operand] / accumulator
+    accumulator /= memory[operand]
     print(f"numbers divided: {accumulator}")
 
 
@@ -241,7 +241,7 @@ def multiply(operand):
     Author: Ali Aydogdu
     """
     global accumulator
-    accumulator = memory[operand] * accumulator
+    accumulator *= memory[operand]
     print(f"numbers multiplied: {accumulator}")
 
 
