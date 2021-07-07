@@ -10,22 +10,20 @@
 -- ----------------------------------------------------------------------------------------
 -- Insert yourself as a Student and add your major
 -- You will need to define a unique value for stuId
---                                    QUERY PLAN
+--                       QUERY PLAN
 -- ----------------------------------------------------------------------------------------
--- INSERT ON student (
---     COST = 0.00..0.01 ROWS = 1 width = 390) -> Result (
---     COST = 0.00..0.01 ROWS = 1 width = 390)
+--  Insert on student  (cost=0.00..0.01 rows=1 width=390)
+--    ->  Result  (cost=0.00..0.01 rows=1 width=390)
 -- ----------------------------------------------------------------------------------------
 EXPLAIN INSERT INTO "student" ("stuid", "lastname", "firstname", "major", "credits")
     VALUES ('S200000', 'Aydogdu', 'Ali', 'CSC', 80);
 
 -- ----------------------------------------------------------------------------------------
 -- Insert (Enroll) yourself in class MTH748C
---                                    QUERY PLAN
+--                      QUERY PLAN
 -- ----------------------------------------------------------------------------------------
--- INSERT ON enroll (
---     COST = 0.00..0.01 ROWS = 1 width = 84) -> Result (
---     COST = 0.00..0.01 ROWS = 1 width = 84)
+--  Insert on enroll  (cost=0.00..0.01 rows=1 width=84)
+--    ->  Result  (cost=0.00..0.01 rows=1 width=84)
 -- ----------------------------------------------------------------------------------------
 EXPLAIN INSERT INTO "enroll" ("stuid", "classnumber", "grade")
     VALUES ('S200000', 'MTH748C', 'A');
@@ -154,9 +152,12 @@ EXPLAIN INSERT INTO "faculty" ("facid", "name", "department", "fac_rank")
 --    ->  Seq Scan on enroll  (cost=0.00..312.77 rows=4115 width=11)
 --          Filter: (classnumber ~~ 'CSC%'::text)
 -- ----------------------------------------------------------------------------------------
-EXPLAIN SELECT DISTINCT
+EXPLAIN
+SELECT
     "classnumber"
 FROM
     "enroll"
 WHERE
-    "classnumber" LIKE 'CSC%';
+    "classnumber" LIKE 'CSC%'
+GROUP BY
+    "classnumber";
