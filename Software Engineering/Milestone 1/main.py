@@ -12,47 +12,98 @@ Date Last Modified: 7/8/2021
 """
 
 
+class Word:
+    """
+    Word class is a helper class to provide methods for easy access to sign_bit, opcode,
+    operand, and magnitude of an instruction or data that stored in memory
+    Author: Ali Aydogdu
+    """
+
+    def __init__(self, word="00000"):
+        """
+        Initialize
+        Default word value is "00000"
+        """
+        self.__word = word
+
+    def get_sign_bit(self):
+        """
+        Returns the Sign Bit 
+        If "1" negative number, otherwise positive number 
+        """
+        return self.__word[0]
+
+    def get_opcode(self):
+        """
+        Returns the opcode of the instruction
+        """
+        return self.__word[1:3]
+
+    def get_operand(self):
+        """
+        Returns the operand of the instruction
+        """
+        return self.__word[3:]
+
+    def get_magnitude(self):
+        """
+        Returns all the bits except sign bit
+        This is used when stored data is not an instruction, it is rather pure data
+        """
+        return self.__word[1:]
+
+    def __str__(self):
+        """
+        Returns string representation of the word
+        """
+        return self.__word
+
+
 class Memory:
     """
-    TODO
+    Memory class creates a list of memory locations that can be accessed with index
+    The user can specify the memory size, default to 100
+    Memory can not grow or shrink
     Author: Ali Aydogdu
     """
 
     def __init__(self, size=100):
         """
-        TODO
+        Initialize
         """
         self.__size = size
         self.__memory = ["00000"] * size
 
     def clear(self):
         """
-        TODO
+        Clears the memory by setting all the locations to "00000"
         """
         for index in range(self.__size):
             self.__memory[index] = "00000"
 
     def get_size(self):
         """
-        TODO
+        Returns the size of the memory
         """
         return self.__size
 
     def get_data_at(self, location=0):
         """
-        TODO
+        Returns the data value at the given memory location
         """
         return self.__memory[location]
 
     def set_data_at(self, location=0, data="00000"):
         """
-        TODO
+        Stores the given data value at the given memory location
         """
         self.__memory[location] = data
 
     def find_opcode(self, opcode):
         """
-        TODO
+        Checks if a specific opcode in the memory
+        This is a helper function to see if the code has "HALT"
+        Potentially this function does not belong here
         """
         for data in self.__memory:
             if opcode == data[1:3]:
@@ -63,26 +114,29 @@ class Memory:
 
 class Accumulator:
     """
-    TODO
+    Simple function for Accumulator 
+    You can set and get the data
+    This can be updated to add data validation
+    Right now it can store anything
     Author: Ali Aydogdu
     """
 
-    def __init__(self, init_value=0):
+    def __init__(self, init_value="00000"):
         """
-        TODO
+        Initialize
         """
         self.__data = init_value
 
     def get_data(self):
         """
-        TODO
+        Returns the data stored in accumulator
         """
 
         return self.__data
 
     def set_data(self, data):
         """
-        TODO
+        Sets the accumulators data
         """
 
         self.__data = data
@@ -90,18 +144,18 @@ class Accumulator:
 
 class UVSim:
     """
-    TODO
+    UVSim 
     Author: Ali Aydogdu
     """
 
     def __init__(self, memory_size=100, accumulator_init_value="00000"):
         """
-        TODO
+        Initialize
         """
         self.__memory = Memory(size=memory_size)
         self.__accumulator = Accumulator(init_value=accumulator_init_value)
         self.__instruction_counter = 0
-        self.__current_instruction = "00000"
+        self.__current_instruction = Word()
         self.__execution_location = 0
 
     def initialize(self):
@@ -169,11 +223,11 @@ class UVSim:
 
         while opcode != "43":
             self.__instruction_counter += 1
-            self.__current_instruction = self.__memory.get_data_at(
-                self.__execution_location
+            self.__current_instruction = Word(
+                self.__memory.get_data_at(self.__execution_location)
             )
-            opcode = self.__current_instruction[1:3]
-            operand = self.__current_instruction[3:]
+            opcode = self.__current_instruction.get_opcode()
+            operand = self.__current_instruction.get_operand()
 
             if opcode == "00":  # Skip
                 self.__execution_location += 1
@@ -250,7 +304,9 @@ class UVSim:
                 data = "1" + f"{abs(value):04d}"
             else:
                 data = "0" + f"{value:04d}"
-            self.__memory.set_data_at(int(self.__current_instruction[3:]), data)
+            self.__memory.set_data_at(
+                int(self.__current_instruction.get_operand()), data
+            )
         except ValueError:
             print("Please enter a valid number between +9999 and -9999!")
             self.read()
@@ -259,15 +315,17 @@ class UVSim:
         """
         Writes a word from a specific location in memory to screen 
         """
-        data = self.__memory.get_data_at(int(self.__current_instruction[3:]))
-        print(f"Memory address '{self.__current_instruction[3:]}' contains: {data}")
+        data = self.__memory.get_data_at(int(self.__current_instruction.get_operand()))
+        print(
+            f"Memory address '{self.__current_instruction.get_operand}' contains: {data}"
+        )
 
     def load(self):
         """
         Loads a word from a specific location in memory into the accumulator
         """
         self.__accumulator.set_data(
-            self.__memory.get_data_at(int(self.__current_instruction[3:]))
+            self.__memory.get_data_at(int(self.__current_instruction.get_operand()))
         )
 
     def store(self):
@@ -275,25 +333,35 @@ class UVSim:
         Stores a word from the accumulator into a specific location in memory
         """
         data = self.__accumulator.get_data()
-        self.__memory.set_data_at(int(self.__current_instruction[3:]), data)
+        self.__memory.set_data_at(int(self.__current_instruction.get_operand()), data)
 
-    def add(self):
+    def __get_operands(self):
         """
-        Adds a word from a specific location in memory to the word in the
-        accumulator (leave the result in the accumulator)
+        Helper function that returns the operands to be used in arithmetic calculations
         """
         operand_1 = self.__accumulator.get_data()
-        operand_2 = self.__memory.get_data_at(int(self.__current_instruction[3:]))
+        operand_2 = Word(
+            self.__memory.get_data_at(int(self.__current_instruction.get_operand()))
+        )
 
         if operand_1[0] == "1":  # Negative Number
             operand_1 = int(operand_1[1:]) * -1
         else:
             operand_1 = int(operand_1[1:])
 
-        if operand_2[0] == "1":  # Negative Number
-            operand_2 = int(operand_2[1:]) * -1
+        if operand_2.get_sign_bit() == "1":  # Negative Number
+            operand_2 = int(operand_2.get_magnitude()) * -1
         else:
-            operand_2 = int(operand_2[1:])
+            operand_2 = int(operand_2.get_magnitude())
+
+        return operand_1, operand_2
+
+    def add(self):
+        """
+        Adds a word from a specific location in memory to the word in the
+        accumulator (leave the result in the accumulator)
+        """
+        operand_1, operand_2 = self.__get_operands()
 
         data = "00000"
         value = operand_1 + operand_2
@@ -310,18 +378,7 @@ class UVSim:
         Subtracts a word from a specific location in memory from the word in the
         accumulator (leave the result in the accumulator)
         """
-        operand_1 = self.__accumulator.get_data()
-        operand_2 = self.__memory.get_data_at(int(self.__current_instruction[3:]))
-
-        if operand_1[0] == "1":  # Negative Number
-            operand_1 = int(operand_1[1:]) * -1
-        else:
-            operand_1 = int(operand_1[1:])
-
-        if operand_2[0] == "1":  # Negative Number
-            operand_2 = int(operand_2[1:]) * -1
-        else:
-            operand_2 = int(operand_2[1:])
+        operand_1, operand_2 = self.__get_operands()
 
         data = "00000"
         value = operand_1 - operand_2
@@ -338,18 +395,7 @@ class UVSim:
         Divides the word in the accumulator by a word from a specific location in
         memory (leave the result in the accumulator)
         """
-        operand_1 = self.__accumulator.get_data()
-        operand_2 = self.__memory.get_data_at(int(self.__current_instruction[3:]))
-
-        if operand_1[0] == "1":  # Negative Number
-            operand_1 = int(operand_1[1:]) * -1
-        else:
-            operand_1 = int(operand_1[1:])
-
-        if operand_2[0] == "1":  # Negative Number
-            operand_2 = int(operand_2[1:]) * -1
-        else:
-            operand_2 = int(operand_2[1:])
+        operand_1, operand_2 = self.__get_operands()
 
         data = "00000"
         value = operand_1 / operand_2
@@ -366,18 +412,7 @@ class UVSim:
         Multipies a word from a specific location in memory to the word in the
         accumulator (leave the result in the accumulator)
         """
-        operand_1 = self.__accumulator.get_data()
-        operand_2 = self.__memory.get_data_at(int(self.__current_instruction[3:]))
-
-        if operand_1[0] == "1":  # Negative Number
-            operand_1 = int(operand_1[1:]) * -1
-        else:
-            operand_1 = int(operand_1[1:])
-
-        if operand_2[0] == "1":  # Negative Number
-            operand_2 = int(operand_2[1:]) * -1
-        else:
-            operand_2 = int(operand_2[1:])
+        operand_1, operand_2 = self.__get_operands()
 
         data = "00000"
         value = operand_1 * operand_2
@@ -401,7 +436,7 @@ class UVSim:
             value = int(value[1:])
 
         if value > 0:
-            return int(self.__current_instruction[3:])
+            return int(self.__current_instruction.get_operand())
         else:
             return self.__execution_location + 1
 
@@ -417,7 +452,7 @@ class UVSim:
             value = int(value[1:])
 
         if value < 0:
-            return int(self.__current_instruction[3:])
+            return int(self.__current_instruction.get_operand())
         else:
             return self.__execution_location + 1
 
@@ -433,7 +468,7 @@ class UVSim:
             value = int(value[1:])
 
         if value == 0:
-            return int(self.__current_instruction[3:])
+            return int(self.__current_instruction.get_operand())
         else:
             return self.__execution_location + 1
 
