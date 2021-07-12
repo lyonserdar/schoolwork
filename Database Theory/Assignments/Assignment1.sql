@@ -3,67 +3,150 @@
 -- ----------------------------------------------------------------------------------------
 -- Author: Ali Aydogdu
 -- Email: lyonserdar@gmail.com
--- Course: CS 3520
+-- Course: CS 3520-602
+-- Date Created: 7/3/2021
+-- Date Last Modified: 7/9/2021
 -- To run the script:
 --      psql -d new_university -a -f Assignment1.sql
 -- ----------------------------------------------------------------------------------------
+SELECT
+    count(*)
+FROM
+    "public"."class";
+
+SELECT
+    count(*)
+FROM
+    "public"."enroll";
+
+SELECT
+    count(*)
+FROM
+    "public"."faculty";
+
+SELECT
+    count(*)
+FROM
+    "public"."student";
+
 -- ----------------------------------------------------------------------------------------
--- Insert yourself as a Student and add your major
+-- 1. Insert yourself as a Student and add your major
 -- You will need to define a unique value for stuId
---                       QUERY PLAN
 -- ----------------------------------------------------------------------------------------
---  Insert on student  (cost=0.00..0.01 rows=1 width=390)
---    ->  Result  (cost=0.00..0.01 rows=1 width=390)
--- ----------------------------------------------------------------------------------------
-EXPLAIN INSERT INTO "student" ("stuid", "lastname", "firstname", "major", "credits")
+SELECT
+    count(*)
+FROM
+    "public"."student";
+
+INSERT INTO "public"."student" ("stuid", "lastname", "firstname", "major", "credits")
     VALUES ('S200000', 'Aydogdu', 'Ali', 'CSC', 80);
 
--- ----------------------------------------------------------------------------------------
--- Insert (Enroll) yourself in class MTH748C
---                      QUERY PLAN
--- ----------------------------------------------------------------------------------------
---  Insert on enroll  (cost=0.00..0.01 rows=1 width=84)
---    ->  Result  (cost=0.00..0.01 rows=1 width=84)
--- ----------------------------------------------------------------------------------------
-EXPLAIN INSERT INTO "enroll" ("stuid", "classnumber", "grade")
-    VALUES ('S200000', 'MTH748C', 'A');
+SELECT
+    count(*)
+FROM
+    "public"."student";
+
+EXPLAIN
+SELECT
+    *
+FROM
+    "public"."student"
+WHERE
+    "stuid" = 'S200000';
+
+SELECT
+    *
+FROM
+    "public"."student"
+WHERE
+    "stuid" = 'S200000';
 
 -- ----------------------------------------------------------------------------------------
--- Select every Class that meets on Monday
---                                    QUERY PLAN
+-- 2.  Insert (Enroll) yourself in class MTH748C. Give yourself an 'A'
 -- ----------------------------------------------------------------------------------------
--- Seq Scan on class  (cost=0.00..20.50 rows=672 width=29)
---    Filter: ((schedule)::text ~~ '%M%'::text)
+SELECT
+    count(*)
+FROM
+    "public"."enroll";
+
+INSERT INTO "public"."enroll" ("stuid", "classnumber", "grade")
+    VALUES ('S200000', 'MTH748C', 'A');
+
+SELECT
+    count(*)
+FROM
+    "public"."enroll";
+
+EXPLAIN
+SELECT
+    *
+FROM
+    "public"."enroll"
+WHERE
+    "stuid" = 'S200000';
+
+SELECT
+    *
+FROM
+    "public"."enroll"
+WHERE
+    "stuid" = 'S200000';
+
+-- ----------------------------------------------------------------------------------------
+-- 3. Select every Class that meets on Monday
 -- ----------------------------------------------------------------------------------------
 EXPLAIN
 SELECT
     *
 FROM
-    "class"
+    "public"."class"
 WHERE
     "schedule" LIKE '%M%';
 
+SELECT
+    *
+FROM
+    "public"."class"
+WHERE
+    "schedule" LIKE '%M%'
+LIMIT 10;
+
 -- ----------------------------------------------------------------------------------------
--- Delete student with the stuId ('S100760') from Class 'HST1049C'
---                                         QUERY PLAN
+-- 4. Delete student with the stuId ('S100760' from Class 'HST1049C')
 -- ----------------------------------------------------------------------------------------
---  Delete on enroll  (cost=0.29..8.31 rows=1 width=6)
---    ->  Index Scan using enroll_pkey on enroll  (cost=0.29..8.31 rows=1 width=6)
---          Index Cond: ((stuid = 'S100760'::bpchar) AND (classnumber = 'HST1049C'::bpchar))
--- ----------------------------------------------------------------------------------------
-EXPLAIN DELETE FROM "enroll"
+EXPLAIN
+SELECT
+    *
+FROM
+    "public"."enroll"
+WHERE
+    "stuid" = 'S100760'
+    AND "classnumber" = 'HST1049C';
+
+SELECT
+    *
+FROM
+    "public"."enroll"
+WHERE
+    "stuid" = 'S100760'
+    AND "classnumber" = 'HST1049C';
+
+DELETE FROM "public"."enroll"
 WHERE "stuid" = 'S100760'
     AND "classnumber" = 'HST1049C';
 
+SELECT
+    *
+FROM
+    "public"."enroll"
+WHERE
+    "stuid" = 'S100760'
+    AND "classnumber" = 'HST1049C';
+
 -- ----------------------------------------------------------------------------------------
--- Update the grade for the student with stuId 'S100784' in class 'MTH1022A' with a 'B'
---                                         QUERY PLAN
+-- 5. Update the grade for the student with stuId 'S100784' in class 'MTH1022A' with a 'B'
 -- ----------------------------------------------------------------------------------------
---  Update on enroll  (cost=0.29..8.31 rows=1 width=33)
---    ->  Index Scan using enroll_pkey on enroll  (cost=0.29..8.31 rows=1 width=33)
---          Index Cond: ((stuid = 'S100784'::bpchar) AND (classnumber = 'MTH1022A'::bpchar))
--- ----------------------------------------------------------------------------------------
-EXPLAIN UPDATE
+UPDATE
     "enroll"
 SET
     "grade" = 'B'
@@ -72,48 +155,113 @@ WHERE
     AND "classnumber" = 'MTH1022A';
 
 -- ----------------------------------------------------------------------------------------
--- Barbara Jones has graduated. Delete her data from both the Student and Enroll tables
---                                             QUERY PLAN
+-- 6. Barbara Jones has graduated. Delete her data from both the Student and Enroll tables
 -- ----------------------------------------------------------------------------------------
---  Delete on enroll  (cost=489.53..500.05 rows=3 width=6)
---    InitPlan 1 (returns $0)
---      ->  Seq Scan on student  (cost=0.00..485.22 rows=1 width=8)
---            Filter: (((firstname)::text = 'BARBARA'::text) AND ((lastname)::text = 'JONES'::text))
---    ->  Bitmap Heap Scan on enroll  (cost=4.31..14.83 rows=3 width=6)
---          Recheck Cond: (stuid = $0)
---          ->  Bitmap Index Scan on enroll_pkey  (cost=0.00..4.31 rows=3 width=0)
---                Index Cond: (stuid = $0)
---                                            QUERY PLAN
--- ----------------------------------------------------------------------------------------
---  Delete on student  (cost=0.00..485.22 rows=1 width=6)
---    ->  Seq Scan on student  (cost=0.00..485.22 rows=1 width=6)
---          Filter: (((firstname)::text = 'BARBARA'::text) AND ((lastname)::text = 'JONES'::text))
--- ----------------------------------------------------------------------------------------
-EXPLAIN DELETE FROM "enroll"
-WHERE "stuid" = (
+EXPLAIN
+SELECT
+    *
+FROM
+    "public"."enroll"
+WHERE
+    "stuid" = (
         SELECT
             "stuid"
         FROM
-            "student"
+            "public"."student"
         WHERE
             "firstname" = 'BARBARA'
             AND "lastname" = 'JONES');
 
-EXPLAIN DELETE FROM "student"
+SELECT
+    *
+FROM
+    "public"."enroll"
+WHERE
+    "stuid" = (
+        SELECT
+            "stuid"
+        FROM
+            "public"."student"
+        WHERE
+            "firstname" = 'BARBARA'
+            AND "lastname" = 'JONES');
+
+DELETE FROM "public"."enroll"
+WHERE "stuid" = (
+        SELECT
+            "stuid"
+        FROM
+            "public"."student"
+        WHERE
+            "firstname" = 'BARBARA'
+            AND "lastname" = 'JONES');
+
+SELECT
+    *
+FROM
+    "public"."enroll"
+WHERE
+    "stuid" = (
+        SELECT
+            "stuid"
+        FROM
+            "public"."student"
+        WHERE
+            "firstname" = 'BARBARA'
+            AND "lastname" = 'JONES');
+
+EXPLAIN
+SELECT
+    *
+FROM
+    "public"."student"
+WHERE
+    "firstname" = 'BARBARA'
+    AND "lastname" = 'JONES';
+
+SELECT
+    *
+FROM
+    "public"."student"
+WHERE
+    "firstname" = 'BARBARA'
+    AND "lastname" = 'JONES';
+
+DELETE FROM "public"."student"
 WHERE "firstname" = 'BARBARA'
     AND "lastname" = 'JONES';
 
+SELECT
+    *
+FROM
+    "public"."student"
+WHERE
+    "firstname" = 'BARBARA'
+    AND "lastname" = 'JONES';
+
 -- ----------------------------------------------------------------------------------------
--- Student John Ling changed his major to history and earned 12 more credits
+-- 7. Student John Ling changed his major to history and earned 12 more credits
 -- Update the students information
---                                          QUERY PLAN
 -- ----------------------------------------------------------------------------------------
---  Update on student  (cost=0.00..485.22 rows=1 width=149)
---    ->  Seq Scan on student  (cost=0.00..485.22 rows=1 width=149)
---          Filter: (((firstname)::text = 'JOHN'::text) AND ((lastname)::text = 'LING'::text))
--- ----------------------------------------------------------------------------------------
-EXPLAIN UPDATE
-    "student"
+EXPLAIN
+SELECT
+    *
+FROM
+    "public"."student"
+WHERE
+    "firstname" = 'JOHN'
+    AND "lastname" = 'LING';
+
+SELECT
+    *
+FROM
+    "public"."student"
+WHERE
+    "firstname" = 'JOHN'
+    AND "lastname" = 'LING';
+
+UPDATE
+    "public"."student"
 SET
     "major" = 'History',
     "credits" = "credits" + 12
@@ -121,43 +269,88 @@ WHERE
     "firstname" = 'JOHN'
     AND "lastname" = 'LING';
 
--- ----------------------------------------------------------------------------------------
--- There is a new Python CSC class
--- Insert the new class. The classNumber is CSC227A and it meets on M, W and F at 10 in room M009
---                      QUERY PLAN
--- ----------------------------------------------------------------------------------------
---  Insert on class  (cost=0.00..0.01 rows=1 width=166)
---    ->  Result  (cost=0.00..0.01 rows=1 width=166)
--- ----------------------------------------------------------------------------------------
-EXPLAIN INSERT INTO "class" ("classnumber", "schedule", "room")
-    VALUES ('CSC227A', 'MWF10', 'M009');
+SELECT
+    *
+FROM
+    "public"."student"
+WHERE
+    "firstname" = 'JOHN'
+    AND "lastname" = 'LING';
 
 -- ----------------------------------------------------------------------------------------
--- A new Art teacher has joined the faculty and there last name is Close
--- Insert the the new teacher into the Faculty table
---                       QUERY PLAN
--- ----------------------------------------------------------------------------------------
---  Insert on faculty  (cost=0.00..0.01 rows=1 width=254)
---    ->  Result  (cost=0.00..0.01 rows=1 width=254)
--- ----------------------------------------------------------------------------------------
-EXPLAIN INSERT INTO "faculty" ("facid", "name", "department", "fac_rank")
-    VALUES ('F380', 'CLOSE', 'Art', 'Instructor');
-
--- ----------------------------------------------------------------------------------------
--- select all CSC classes that students are enrolled in
---                             QUERY PLAN
--- ----------------------------------------------------------------------------------------
---  HashAggregate  (cost=323.06..332.97 rows=991 width=11)
---    Group Key: classnumber
---    ->  Seq Scan on enroll  (cost=0.00..312.77 rows=4115 width=11)
---          Filter: (classnumber ~~ 'CSC%'::text)
+-- 8. There is a new Python CSC class
+-- Insert the new class. The classNumber is CSC227A and it meets on M, W and F at 10 in room M009.
+-- The class is taught by Lor with Faculty Id F308
 -- ----------------------------------------------------------------------------------------
 EXPLAIN
 SELECT
-    "classnumber"
+    *
 FROM
-    "enroll"
+    "public"."class"
 WHERE
-    "classnumber" LIKE 'CSC%'
-GROUP BY
-    "classnumber";
+    "classnumber" = 'CSC227A';
+
+SELECT
+    *
+FROM
+    "public"."class"
+WHERE
+    "classnumber" = 'CSC227A';
+
+INSERT INTO "public"."class" ("classnumber", "facid", "schedule", "room")
+    VALUES ('CSC227A', 'F308', 'MWF10', 'M009');
+
+SELECT
+    *
+FROM
+    "public"."class"
+WHERE
+    "classnumber" = 'CSC227A';
+
+-- ----------------------------------------------------------------------------------------
+-- 9. A new Art teacher has joined the faculty and there last name is Close. Close's rank is Instructor
+-- Insert the the new teacher into the Faculty table
+-- ----------------------------------------------------------------------------------------
+EXPLAIN
+SELECT
+    *
+FROM
+    "public"."faculty"
+WHERE
+    "facid" = 'F380';
+
+SELECT
+    *
+FROM
+    "public"."faculty"
+WHERE
+    "facid" = 'F280';
+
+INSERT INTO "public"."faculty" ("facid", "name", "department", "fac_rank")
+    VALUES ('F380', 'CLOSE', 'Art', 'Instructor');
+
+SELECT
+    *
+FROM
+    "public"."faculty"
+WHERE
+    "facid" = 'F380';
+
+-- ----------------------------------------------------------------------------------------
+-- 10. select all students that are CSC majors
+-- ----------------------------------------------------------------------------------------
+EXPLAIN
+SELECT
+    *
+FROM
+    "public"."student"
+WHERE
+    "major" LIKE 'CSC';
+
+SELECT
+    *
+FROM
+    "public"."student"
+WHERE
+    "major" LIKE 'CSC'
+LIMIT 10;
