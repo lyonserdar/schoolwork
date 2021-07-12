@@ -51,3 +51,4 @@ class Word:
         Returns string representation of the word
         """
         return self.__word
+

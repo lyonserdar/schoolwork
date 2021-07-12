@@ -153,8 +153,7 @@ class Add(ArithmeticOperation):
         """
         TODO
         """
-        operand_1, operand_2 = super().get_operands(memory, accumulator, operand)
-
+        operand_1, operand_2 = self.get_operands(memory, accumulator, operand)
         data = "00000"
         value = operand_1 + operand_2
 
@@ -179,7 +178,7 @@ class Subtract(ArithmeticOperation):
         """
         TODO
         """
-        operand_1, operand_2 = super().get_operands(memory, accumulator, operand)
+        operand_1, operand_2 = self.get_operands(memory, accumulator, operand)
 
         data = "00000"
         value = operand_1 - operand_2
@@ -205,7 +204,7 @@ class Divide(ArithmeticOperation):
         """
         TODO
         """
-        operand_1, operand_2 = super().get_operands(memory, accumulator, operand)
+        operand_1, operand_2 = self.get_operands(memory, accumulator, operand)
 
         data = "00000"
         value = operand_1 / operand_2
@@ -231,7 +230,7 @@ class Multiply(ArithmeticOperation):
         """
         TODO
         """
-        operand_1, operand_2 = super().get_operands(memory, accumulator, operand)
+        operand_1, operand_2 = self.get_operands(memory, accumulator, operand)
 
         data = "00000"
         value = operand_1 * operand_2
